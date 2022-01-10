@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.1 (unreleased)
+0.1.1 (2022-01-10)
 ------------------
 
 - Fix domain names when saving cookie settings.
