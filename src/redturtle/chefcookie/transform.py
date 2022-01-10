@@ -9,8 +9,6 @@ from zope.interface import Interface
 from redturtle.chefcookie.interfaces import IChefCookieSettings
 from plone import api
 
-import re
-
 
 @implementer(ITransform)
 @adapter(Interface, Interface)  # any context, any request
