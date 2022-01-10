@@ -4,7 +4,8 @@ Changelog
 0.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove YouTube unused field.
+  [cekk]
 
 
 0.1.2 (2022-01-10)
