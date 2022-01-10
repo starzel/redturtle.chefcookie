@@ -4,8 +4,8 @@ Changelog
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Fix accept_iframe loading.
+  [cekk]
 
 0.1.1 (2022-01-10)
 ------------------
