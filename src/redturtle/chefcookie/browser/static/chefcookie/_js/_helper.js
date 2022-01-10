@@ -62,12 +62,6 @@ export default class helper {
     }
 
     static urlHostTopLevel() {
-        let host = window.location.hostname;
-        host = host.split('.');
-        while (host.length > 2) {
-            host.shift();
-        }
-        host = host.join('.');
-        return host;
+        return window.location.hostname;
     }
 }
