@@ -11,3 +11,4 @@ exclude constraints_plone51.txt
 exclude constraints_plone52.txt
 exclude requirements.txt
 exclude tox.ini
+exclude .flake8
