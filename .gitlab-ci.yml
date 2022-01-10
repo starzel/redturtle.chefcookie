@@ -1,0 +1,84 @@
+image: python:3.8
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+    - downloads/
+    - eggs/
+
+# Set execution order: first run jobs on 'test' stage on parallel
+# then run jobs on 'report' stage
+stages:
+  - test
+  - release
+
+before_script:
+  - pip install virtualenv
+  - export LC_CTYPE=C.UTF-8
+  - export LC_ALL=C.UTF-8
+  - export LANG=C.UTF-8
+  - virtualenv --clear -p python3.8 venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  - buildout bootstrap
+  - bin/buildout -n -c buildout.cfg
+
+black:
+  stage: test
+  before_script:
+    - pip install black
+  script:
+    - black src/ --check --diff
+
+flake8:
+  stage: test
+  before_script:
+    - pip install flake8
+  script:
+    - flake8 src/ setup.py
+
+pyroma:
+  stage: test
+  before_script:
+    - pip install pyroma
+  script:
+    - pyroma -n 10 -d .
+  
+zpretty:
+  stage: test
+  before_script:
+    - pip install zpretty
+  script:
+    - find src -name '*.zcml' | xargs zpretty -i
+    - git diff --exit-code
+
+test:
+  stage: test
+  script:
+    - bin/test
+
+release:
+  stage: release
+  before_script: []
+  script:
+    - python -V
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install check-manifest twine
+    - check-manifest
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+  only:
+    - tags
