@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.1 (unreleased)
+0.2.1 (2022-01-11)
 ------------------
 
 - Fix layers in adapters.
