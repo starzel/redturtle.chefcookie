@@ -15,7 +15,49 @@ logger = logging.getLogger(__name__)
 TEMPLATE = """
 
 var iframeCookies = {iframe_cookies_ids_placeholder};
+var anchorCookies = {anchor_cookies_ids_placeholder};
 var profiling_cookies_config = {profiling_cookies_config_placeholder};
+
+function accept_anchor_based_provider(cc, placeholder_identifier){
+    $("div." + placeholder_identifier).each(function(){
+        var placeholder = $(this);
+        var anchor = placeholder.next();
+        var twitter = anchor.next();
+        var anchor_href = anchor.data().ccHref;
+        var twitter_src = twitter.data().ccSrc;
+        var name = anchor.data().ccName;
+        if(cc.isAccepted(name)){
+            anchor.attr('href', anchor_href);
+            anchor.attr('hidden', false);
+            twitter.attr('hidden', false);
+            twitter.attr('src', twitter_src);
+            placeholder.attr('hidden', true);
+        }// else {
+        //   anchor.attr('href', '');
+        //   anchor.attr('hidden', true);
+        //   twitter.attr('hidden', true);
+           // we need to identify the iframe
+        //   debugger;
+        //   twitter.attr('src', );
+        //   placeholder.attr('hidden', false);
+        // }
+    });
+}
+
+function decline_anchor_based_provider(cc, placeholder_identifier){
+    debugger;
+}
+
+function accept_twitter_timeline(cc){
+    var placeholder_identifier = 'twittertimeline-placeholder';
+    accept_anchor_based_provider(cc, placeholder_identifier);
+}
+
+function decline_twitter_timeline(cc){
+    var placeholder_identifier = 'twittertimeline-placeholder';
+    decline_anchor_based_provider(cc, placeholder_identifier);
+
+}
 
 function accept_iframe(cc) {
     $("iframe").each(function() {
@@ -39,6 +81,7 @@ function accept_iframe(cc) {
 
 if (Object.keys(profiling_cookies_config).length > 0) {
     var has_hotjar = {has_hotjar_placeholder};
+
     iframeCookies.forEach(function(name) {
         if (profiling_cookies_config.scripts[name] !== undefined) {
             profiling_cookies_config.scripts[name].accept = (cc, resolve, isInit) => {
@@ -52,6 +95,19 @@ if (Object.keys(profiling_cookies_config).length > 0) {
                     document.head.appendChild(script);
                     window.chefcookie_loaded.push(name);
                 }
+            };
+        }
+    });
+
+    anchorCookies.forEach(function(name) {
+        if (profiling_cookies_config.scripts[name] !== undefined) {
+            profiling_cookies_config.scripts[name].accept = (cc, resolve, isInit) => {
+                if (name === 'twittertimeline'){
+                    accept_twitter_timeline(cc);
+                }
+            };
+            profiling_cookies_config.scripts[name].decline = (provider) =>{
+                decline_twitter_timeline(cc);
             };
         }
     });
@@ -198,6 +254,10 @@ class View(BrowserView):
                 json.dumps(self.get_iframe_cookies_ids()),
             )
             .replace(
+                "{anchor_cookies_ids_placeholder}",
+                json.dumps(self.get_anchor_cookies_ids()),
+            )
+            .replace(
                 "{profiling_cookies_config_placeholder}",
                 self.get_profiling_cookies_config(),
             )
@@ -210,7 +270,10 @@ class View(BrowserView):
             )
             .replace("{message_labels_placeholder}", self.get_message_labels())
             .replace("{labels_placeholder}", self.get_labels())
-            .replace("{technical_cookies_placeholder}", self.get_tech_cookies_config())
+            .replace(
+                "{technical_cookies_placeholder}",
+                self.get_tech_cookies_config(),
+            )
             .replace("{settings_placeholder}", self.get_settings())
             .replace(
                 "{open_settings_placeholder}",
@@ -289,6 +352,7 @@ class View(BrowserView):
 
         facebook_id = self.get_registry_settings(name="facebook_id")
         iframe_cookies_ids = self.get_iframe_cookies_ids()
+        anchor_cookies_ids = self.get_anchor_cookies_ids()
         hotjar_id = self.get_registry_settings(name="hotjar_id")
         linkedin_id = self.get_registry_settings(name="linkedin_id")
         profiling_cookies_labels = self.get_registry_settings(
@@ -298,7 +362,12 @@ class View(BrowserView):
             name="profiling_cookies_specific_labels", load_json=True
         )
 
-        if not hotjar_id and not linkedin_id and not iframe_cookies_ids:
+        if (
+            not hotjar_id  # noqa
+            and not linkedin_id  # noqa
+            and not iframe_cookies_ids  # noqa
+            and not anchor_cookies_ids  # noqa
+        ):
             return "{}"
 
         scripts = {}
@@ -307,6 +376,12 @@ class View(BrowserView):
             labels = profiling_cookies_specific_labels.get(iframe_id, {})
             if labels:
                 scripts[iframe_id] = labels
+
+        # handle provider base on anchor like twitter timeline
+        for anchor_id in anchor_cookies_ids:
+            labels = profiling_cookies_specific_labels.get(anchor_id, {})
+            if labels:
+                scripts[anchor_id] = labels
 
         if facebook_id:
             if "facebook" not in scripts:
@@ -351,6 +426,15 @@ class View(BrowserView):
 
     def get_iframe_cookies_ids(self):
         data = self.get_registry_settings(name="iframes_mapping")
+
+        res = []
+        for mapping in data:
+            id, domains = mapping.split("|")
+            res.append(id)
+        return res
+
+    def get_anchor_cookies_ids(self):
+        data = self.get_registry_settings(name="links_mapping")
 
         res = []
         for mapping in data:
