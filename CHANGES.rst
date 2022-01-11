@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.4 (unreleased)
+0.2.0 (2022-01-11)
 ------------------
 
 - Add facebook script manually (copied from original chefcookie script).
