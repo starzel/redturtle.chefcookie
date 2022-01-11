@@ -16,7 +16,7 @@ long_description = "\n\n".join(
 
 setup(
     name="redturtle.chefcookie",
-    version="0.2.1",
+    version="0.2.2.dev0",
     description="Cookie policy integration with chefookie",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/
