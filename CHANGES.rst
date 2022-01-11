@@ -4,7 +4,8 @@ Changelog
 0.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add facebook script manually (copied from original chefcookie script).
+  [cekk]
 
 
 0.1.3 (2022-01-10)
