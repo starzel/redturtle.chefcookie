@@ -266,15 +266,16 @@ class View(BrowserView):
                 self.get_tech_cookies_config(),
             )
             .replace("{settings_placeholder}", self.get_settings())
-            .replace("{open_settings_placeholder}", manage_cookie_label,)
+            .replace(
+                "{open_settings_placeholder}",
+                manage_cookie_label,
+            )
         )
 
     @view.memoize
     def get_registry_settings(self, name, load_json=False):
         try:
-            value = api.portal.get_registry_record(
-                name, interface=IChefCookieSettings
-            )
+            value = api.portal.get_registry_record(name, interface=IChefCookieSettings)
             if load_json:
                 value = json.loads(value)
             if isinstance(value, six.string_types) and six.PY2:
@@ -352,10 +353,12 @@ class View(BrowserView):
             name="profiling_cookies_specific_labels", load_json=True
         )
 
-        if not hotjar_id \
-           and not linkedin_id\
-           and not iframe_cookies_ids\
-           and not anchor_cookies_ids:
+        if (
+            not hotjar_id
+            and not linkedin_id
+            and not iframe_cookies_ids
+            and not anchor_cookies_ids
+        ):
             return "{}"
 
         scripts = {}
@@ -380,9 +383,7 @@ class View(BrowserView):
 
         if linkedin_id and "linkedin" in profiling_cookies_specific_labels:
             scripts["linkedin"] = {"id": linkedin_id}
-            scripts["linkedin"].update(
-                profiling_cookies_specific_labels["linkedin"]
-            )
+            scripts["linkedin"].update(profiling_cookies_specific_labels["linkedin"])
 
         res = {
             "checked_by_default": False,

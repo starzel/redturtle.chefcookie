@@ -9,9 +9,7 @@ DEFAULT_PROFILE = "profile-redturtle.chefcookie:default"
 
 
 def update_profile(context, profile, run_dependencies=True):
-    context.runImportStepFromProfile(
-        DEFAULT_PROFILE, profile, run_dependencies
-    )
+    context.runImportStepFromProfile(DEFAULT_PROFILE, profile, run_dependencies)
 
 
 def update_registry(context):

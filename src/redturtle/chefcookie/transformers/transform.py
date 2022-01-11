@@ -83,9 +83,7 @@ class ChefcookieIframeTransform(object):
         except (AttributeError, TypeError, etree.ParseError):
             return
 
-        self.chefcookie_registry_record = registry.forInterface(
-            IChefCookieSettings
-        )
+        self.chefcookie_registry_record = registry.forInterface(IChefCookieSettings)
 
         path = "//iframe"
         for iframe in result.tree.xpath(path):

@@ -108,36 +108,28 @@ ANCHOR_MAPPING = [u"twitter|twitter-timeline"]
 if six.PY2:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4).decode("utf-8")
     GENERAL_LABELS = json.dumps(LABELS["general"], indent=4).decode("utf-8")
-    TECHNICAL_COOKIES_LABELS = json.dumps(
-        LABELS["technical_cookies"], indent=4
-    ).decode("utf-8")
+    TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4).decode(
+        "utf-8"
+    )
     FUNCTIONAL_COOKIES_LABELS = json.dumps(
         LABELS["functional_cookies"], indent=4
     ).decode("utf-8")
-    ANALYTICS_COOKIES_LABELS = json.dumps(
-        LABELS["analytics_cookies"], indent=4
-    ).decode("utf-8")
-    PROFILING_COOKIES_LABELS = json.dumps(
-        LABELS["profiling_cookies"], indent=4
-    ).decode("utf-8")
+    ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4).decode(
+        "utf-8"
+    )
+    PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4).decode(
+        "utf-8"
+    )
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4
     ).decode("utf-8")
 else:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4)
     GENERAL_LABELS = json.dumps(LABELS["general"], indent=4)
-    TECHNICAL_COOKIES_LABELS = json.dumps(
-        LABELS["technical_cookies"], indent=4
-    )
-    FUNCTIONAL_COOKIES_LABELS = json.dumps(
-        LABELS["functional_cookies"], indent=4
-    )
-    ANALYTICS_COOKIES_LABELS = json.dumps(
-        LABELS["analytics_cookies"], indent=4
-    )
-    PROFILING_COOKIES_LABELS = json.dumps(
-        LABELS["profiling_cookies"], indent=4
-    )
+    TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4)
+    FUNCTIONAL_COOKIES_LABELS = json.dumps(LABELS["functional_cookies"], indent=4)
+    ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4)
+    PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4)
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4
     )
@@ -165,28 +157,42 @@ def iframe_placeholder(name, soup=None):
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _("iframe_placeholder_text_2", default=u"Please",), context=request,
+        _(
+            "iframe_placeholder_text_2",
+            default=u"Please",
+        ),
+        context=request,
     )
     tag.append(span_tag)
 
     a_tag_enable_yt = soup.new_tag("a", href="#")
     a_tag_enable_yt["data-cc-enable"] = name
     a_tag_enable_yt.string = translate(
-        _("iframe_placeholder_text_3", default=u"enable them",),
+        _(
+            "iframe_placeholder_text_3",
+            default=u"enable them",
+        ),
         context=request,
     )
     tag.append(a_tag_enable_yt)
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _("iframe_placeholder_text_4", default=u" or ",), context=request,
+        _(
+            "iframe_placeholder_text_4",
+            default=u" or ",
+        ),
+        context=request,
     )
     tag.append(span_tag)
 
     a_tag_open_cc = soup.new_tag("a", href="#")
     a_tag_open_cc["data-cc-open"] = ""
     a_tag_open_cc.string = translate(
-        _("iframe_placeholder_text_5", default=u"manage your preferences",),
+        _(
+            "iframe_placeholder_text_5",
+            default=u"manage your preferences",
+        ),
         context=request,
     )
     tag.append(a_tag_open_cc)
@@ -218,28 +224,42 @@ def anchor_placeholder(provider_name):
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _("iframe_placeholder_text_2", default=u"Please",), context=request,
+        _(
+            "iframe_placeholder_text_2",
+            default=u"Please",
+        ),
+        context=request,
     )
     tag.append(span_tag)
 
     a_tag_enable_yt = soup.new_tag("a", href="#")
     a_tag_enable_yt["data-cc-enable"] = provider_name
     a_tag_enable_yt.string = translate(
-        _("iframe_placeholder_text_3", default=u"enable them",),
+        _(
+            "iframe_placeholder_text_3",
+            default=u"enable them",
+        ),
         context=request,
     )
     tag.append(a_tag_enable_yt)
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _("iframe_placeholder_text_4", default=u" or ",), context=request,
+        _(
+            "iframe_placeholder_text_4",
+            default=u" or ",
+        ),
+        context=request,
     )
     tag.append(span_tag)
 
     a_tag_open_cc = soup.new_tag("a", href="#")
     a_tag_open_cc["data-cc-open"] = ""
     a_tag_open_cc.string = translate(
-        _("iframe_placeholder_text_5", default=u"manage your preferences",),
+        _(
+            "iframe_placeholder_text_5",
+            default=u"manage your preferences",
+        ),
         context=request,
     )
     tag.append(a_tag_open_cc)

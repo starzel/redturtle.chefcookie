@@ -15,8 +15,7 @@ class AnchorPlaceholder(object):
         self.context = context
 
     def transform_anchor(self, provider_name, anchor):
-        """
-        """
+        """ """
         href = anchor.attrib.get("href")
         anchor.attrib.pop("href")
         anchor.set("data-cc-name", provider_name)
