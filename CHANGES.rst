@@ -6,6 +6,8 @@ Changelog
 
 - Add facebook script manually (copied from original chefcookie script).
   [cekk]
+- Allow to handle social based on link/script like twitter timeline
+  [lucabel]
 
 
 0.1.3 (2022-01-10)
