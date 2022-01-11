@@ -81,7 +81,7 @@ function accept_iframe(cc) {
 
 if (Object.keys(profiling_cookies_config).length > 0) {
     var has_hotjar = {has_hotjar_placeholder};
-    
+
     iframeCookies.forEach(function(name) {
         if (profiling_cookies_config.scripts[name] !== undefined) {
             profiling_cookies_config.scripts[name].accept = (cc, resolve, isInit) => {
@@ -89,20 +89,20 @@ if (Object.keys(profiling_cookies_config).length > 0) {
             };
         }
     });
-    
+
     anchorCookies.forEach(function(name) {
         if (profiling_cookies_config.scripts[name] !== undefined) {
             profiling_cookies_config.scripts[name].accept = (cc, resolve, isInit) => {
                 if (name === 'twittertimeline'){
                     accept_twitter_timeline(cc);
-                }  
+                }
             };
             profiling_cookies_config.scripts[name].decline = (provider) =>{
                 decline_twitter_timeline(cc);
             };
         }
     });
-    
+
     if (has_hotjar) {
         var hjLabels = {hotjar_labels_placeholder};
         profiling_cookies_config.scripts.hotjar = {

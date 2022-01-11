@@ -9,7 +9,6 @@ from zope.interface import Interface
 from redturtle.chefcookie.interfaces import IChefCookieSettings
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
-from plone import api
 from zope.component import queryAdapter
 from redturtle.chefcookie.transformers import INodePlaceholder
 from zope.component.interfaces import ComponentLookupError
