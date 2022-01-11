@@ -352,12 +352,10 @@ class View(BrowserView):
             name="profiling_cookies_specific_labels", load_json=True
         )
 
-        if (
-            not hotjar_id \
+        if not hotjar_id \
             and not linkedin_id\
             and not iframe_cookies_ids\
-            and not anchor_cookies_ids
-        ):
+            and not anchor_cookies_ids:
             return "{}"
 
         scripts = {}
