@@ -5,6 +5,7 @@ from redturtle.chefcookie.defaults import GENERAL_LABELS
 from redturtle.chefcookie.defaults import TECHNICAL_COOKIES_LABELS
 from redturtle.chefcookie.defaults import FUNCTIONAL_COOKIES_LABELS
 from redturtle.chefcookie.defaults import IFRAMES_MAPPING
+from redturtle.chefcookie.defaults import ANCHOR_MAPPING
 from redturtle.chefcookie.defaults import ANALYTICS_COOKIES_LABELS
 from redturtle.chefcookie.defaults import PROFILING_COOKIES_LABELS
 from redturtle.chefcookie.defaults import PROFILING_COOKIES_SPECIFIC_LABELS
@@ -31,11 +32,15 @@ def validate_cfg_json(value):
             _(
                 "invalid_json",
                 "JSON is not valid, parser complained: ${message}",
-                mapping={"message": "{msg} {pos}".format(msg=e.msg, pos=e.pos)},
+                mapping={
+                    "message": "{msg} {pos}".format(msg=e.msg, pos=e.pos)
+                },
             )
         )
     if not isinstance(jv, dict):
-        raise Invalid(_("invalid_cfg_no_dict", "JSON root must be a mapping (dict)"))
+        raise Invalid(
+            _("invalid_cfg_no_dict", "JSON root must be a mapping (dict)")
+        )
     return True
 
 
@@ -81,7 +86,9 @@ class IChefCookieSettingsConfigs(Schema):
     )
 
     youtube = schema.Bool(
-        title=_("chefcookie_youtube_label", default=u"Add YouTube to consent panel"),
+        title=_(
+            "chefcookie_youtube_label", default=u"Add YouTube to consent panel"
+        ),
         description=_(
             "chefcookie_youtube_help",
             default=u"Select if you want to add YouTube to consent panel (in profiling cookies section) to allow users disable its tracking.",
@@ -91,7 +98,8 @@ class IChefCookieSettingsConfigs(Schema):
 
     only_technical_cookies = schema.Bool(
         title=_(
-            "chefcookie_only_technical_cookies_label", default=u"Only technical cookies"
+            "chefcookie_only_technical_cookies_label",
+            default=u"Only technical cookies",
         ),
         description=_(
             "chefcookie_only_technical_cookies_help",
@@ -110,12 +118,25 @@ class IChefCookieSettingsConfigs(Schema):
     )
 
     iframes_mapping = schema.List(
-        title=_("chefcookie_iframes_mapping_labels", default=u"Iframes mapping"),
+        title=_(
+            "chefcookie_iframes_mapping_labels", default=u"Iframes mapping"
+        ),
         description=_(
             "chefcookie_iframes_mapping_labels_help",
             default=u"Insert a list of mappings between a provider and a list of possible domains for their iframes. If the user blocks their cookies, the iframes will be blocked as well.",
         ),
         default=IFRAMES_MAPPING,
+        missing_value=[],
+        value_type=schema.TextLine(),
+        required=False,
+    )
+    links_mapping = schema.List(
+        title=_("chefcookie_links_mapping_labels", default=u"Links mapping "),
+        description=_(
+            "chefcookie_links_mapping_labels_help",
+            default=u"Insert a list of mappings between a provider and a list of possible links xpath selector for their anchor. If the user blocks their cookies, the provider will be blocked as well.",
+        ),
+        default=ANCHOR_MAPPING,
         missing_value=[],
         value_type=schema.TextLine(),
         required=False,
@@ -138,10 +159,7 @@ class IChefCookieSettingsLabels(Schema):
 
     general_labels = schema.SourceText(
         title=_("chefcookie_general_labels", default=u"General labels"),
-        description=_(
-            "chefcookie_general_labels_help",
-            default=u"",
-        ),
+        description=_("chefcookie_general_labels_help", default=u"",),
         default=GENERAL_LABELS,
         constraint=validate_cfg_json,
         required=True,
@@ -149,11 +167,11 @@ class IChefCookieSettingsLabels(Schema):
 
     technical_cookies_labels = schema.SourceText(
         title=_(
-            "chefcookie_technical_cookies_labels", default=u"Technical cookies labels"
+            "chefcookie_technical_cookies_labels",
+            default=u"Technical cookies labels",
         ),
         description=_(
-            "chefcookie_technical_cookies_labels_help",
-            default=u"",
+            "chefcookie_technical_cookies_labels_help", default=u"",
         ),
         default=TECHNICAL_COOKIES_LABELS,
         constraint=validate_cfg_json,
@@ -161,7 +179,8 @@ class IChefCookieSettingsLabels(Schema):
     )
     functional_cookies_labels = schema.SourceText(
         title=_(
-            "chefcookie_functional_cookies_labels", default=u"Functional cookies labels"
+            "chefcookie_functional_cookies_labels",
+            default=u"Functional cookies labels",
         ),
         description=_(
             "chefcookie_functional_cookies_labels_help",
@@ -174,7 +193,8 @@ class IChefCookieSettingsLabels(Schema):
 
     analytics_cookies_labels = schema.SourceText(
         title=_(
-            "chefcookie_analytics_cookies_labels", default=u"Analytics cookies labels"
+            "chefcookie_analytics_cookies_labels",
+            default=u"Analytics cookies labels",
         ),
         description=_(
             "chefcookie_analytics_cookies_labels_help",
@@ -187,11 +207,11 @@ class IChefCookieSettingsLabels(Schema):
 
     profiling_cookies_labels = schema.SourceText(
         title=_(
-            "chefcookie_profiling_cookies_labels", default=u"Profiling cookies labels"
+            "chefcookie_profiling_cookies_labels",
+            default=u"Profiling cookies labels",
         ),
         description=_(
-            "chefcookie_profiling_cookies_labels_help",
-            default=u"",
+            "chefcookie_profiling_cookies_labels_help", default=u"",
         ),
         default=PROFILING_COOKIES_LABELS,
         constraint=validate_cfg_json,
@@ -213,5 +233,7 @@ class IChefCookieSettingsLabels(Schema):
     )
 
 
-class IChefCookieSettings(IChefCookieSettingsConfigs, IChefCookieSettingsLabels):
+class IChefCookieSettings(
+    IChefCookieSettingsConfigs, IChefCookieSettingsLabels
+):
     """"""

@@ -16,12 +16,15 @@
   <!--<includeDependencies package="." />-->
 
   <include package=".browser" />
+  <include package=".transformers" />
 
   <configure zcml:condition="installed plone.restapi">
     <include package=".restapi" />
   </configure>
 
   <include file="permissions.zcml" />
+  <include file="upgrades.zcml" />
+  
 
   <genericsetup:registerProfile
       name="default"
@@ -42,13 +45,6 @@
   <utility
       factory=".setuphandlers.HiddenProfiles"
       name="redturtle.chefcookie-hiddenprofiles"
-      />
-
-  <adapter
-      factory=".transform.YoutubeIframeTransform"
-      for="*
-           *"
-      name="redturtle.chefcookie.YoutubeIframeTransform"
       />
 
 </configure>
