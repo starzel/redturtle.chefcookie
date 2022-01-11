@@ -1,7 +1,26 @@
 Changelog
 =========
 
-0.1.1 (unreleased)
+0.1.4 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+0.1.3 (2022-01-10)
+------------------
+
+- Remove YouTube unused field.
+  [cekk]
+
+
+0.1.2 (2022-01-10)
+------------------
+
+- Fix accept_iframe loading.
+  [cekk]
+
+0.1.1 (2022-01-10)
 ------------------
 
 - Fix domain names when saving cookie settings.

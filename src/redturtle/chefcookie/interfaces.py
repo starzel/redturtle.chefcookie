@@ -85,17 +85,6 @@ class IChefCookieSettingsConfigs(Schema):
         required=False,
     )
 
-    youtube = schema.Bool(
-        title=_(
-            "chefcookie_youtube_label", default=u"Add YouTube to consent panel"
-        ),
-        description=_(
-            "chefcookie_youtube_help",
-            default=u"Select if you want to add YouTube to consent panel (in profiling cookies section) to allow users disable its tracking.",
-        ),
-        required=False,
-    )
-
     only_technical_cookies = schema.Bool(
         title=_(
             "chefcookie_only_technical_cookies_label",

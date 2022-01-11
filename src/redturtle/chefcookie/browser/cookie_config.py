@@ -171,6 +171,7 @@ var cc = new redturtlechefcookie({
 });
 document.addEventListener("DOMContentLoaded", () => {
   cc.init();
+  accept_iframe(cc);
   document.querySelectorAll(".pat-tiles-management").forEach(el => {
     el.addEventListener("rtTilesLoaded", e => {
       accept_iframe(cc);

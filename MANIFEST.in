@@ -12,3 +12,5 @@ exclude constraints_plone52.txt
 exclude requirements.txt
 exclude tox.ini
 exclude .flake8
+prune src/redturtle/chefcookie/browser/static/chefcookie/_build
+prune src/redturtle/chefcookie/browser/static/chefcookie/node_modules
