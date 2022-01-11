@@ -354,10 +354,10 @@ class View(BrowserView):
         )
 
         if (
-            not hotjar_id
-            and not linkedin_id
-            and not iframe_cookies_ids
-            and not anchor_cookies_ids
+            not hotjar_id  # noqa
+            and not linkedin_id  # noqa
+            and not iframe_cookies_ids  # noqa
+            and not anchor_cookies_ids  # noqa
         ):
             return "{}"
 
