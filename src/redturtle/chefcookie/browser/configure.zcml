@@ -30,6 +30,7 @@
       for="*"
       class=".cookie_config.View"
       permission="zope.Public"
+      layer="redturtle.chefcookie.interfaces.IRedturtleChefcookieLayer"
       />
 
   <browser:viewlet

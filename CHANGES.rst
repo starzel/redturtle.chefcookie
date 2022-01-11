@@ -4,8 +4,8 @@ Changelog
 0.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Fix layers in adapters.
+  [cekk]
 
 0.2.0 (2022-01-11)
 ------------------

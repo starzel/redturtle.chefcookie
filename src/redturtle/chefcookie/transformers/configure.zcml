@@ -7,8 +7,6 @@
 
   <adapter
       factory=".transform.ChefcookieIframeTransform"
-      for="*
-           *"
       name="redturtle.chefcookie.ChefcookieIframeTransform"
       />
 

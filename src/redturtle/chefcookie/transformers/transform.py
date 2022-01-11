@@ -12,10 +12,11 @@ from plone.registry.interfaces import IRegistry
 from zope.component import queryAdapter
 from redturtle.chefcookie.transformers import INodePlaceholder
 from zope.component.interfaces import ComponentLookupError
+from redturtle.chefcookie.interfaces import IRedturtleChefcookieLayer
 
 
 @implementer(ITransform)
-@adapter(Interface, Interface)  # any context, any request
+@adapter(Interface, IRedturtleChefcookieLayer)  # any context, any request
 class ChefcookieIframeTransform(object):
 
     order = 8887  #  just one less than collective.lazysizes
