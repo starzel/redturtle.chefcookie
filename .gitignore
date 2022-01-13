@@ -30,6 +30,7 @@ output.xml
 pip-selfcheck.json
 report.html
 .vscode/
+.idea/
 .tox/
 reports/
 src/redturtle/chefcookie/locales/__pycache__/
