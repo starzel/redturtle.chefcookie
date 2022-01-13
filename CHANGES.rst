@@ -4,7 +4,8 @@ Changelog
 0.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Align text with label of buttons.
+  [eikichi18]
 
 
 0.2.1 (2022-01-11)
