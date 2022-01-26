@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if ({only_technical_cookies_value_placeholder} === true) {
+  if ({only_technical_cookies_value_placeholder} != true) {
     $('body').append('<a title="{open_settings_placeholder}" id="cookie-settings-open" data-cc-open-settings=“” href=“/”><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-lock" class="svg-inline--fa fa-user-lock fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 96 128a128 128 0 0 0 128 128zm96 64a63.08 63.08 0 0 1 8.1-30.5c-4.8-.5-9.5-1.5-14.5-1.5h-16.7a174.08 174.08 0 0 1-145.8 0h-16.7A134.43 134.43 0 0 0 0 422.4V464a48 48 0 0 0 48 48h280.9a63.54 63.54 0 0 1-8.9-32zm288-32h-32v-80a80 80 0 0 0-160 0v80h-32a32 32 0 0 0-32 32v160a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V320a32 32 0 0 0-32-32zM496 432a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm32-144h-64v-80a32 32 0 0 1 64 0z"></path></svg></a>');
 }
 
@@ -283,14 +283,16 @@ class View(BrowserView):
             )
             .replace(
                 "{only_technical_cookies_value_placeholder}",
-                self.get_only_technical_cookies_values()
+                self.get_only_technical_cookies_values(),
             )
         )
 
     @view.memoize
     def get_registry_settings(self, name, load_json=False):
         try:
-            value = api.portal.get_registry_record(name, interface=IChefCookieSettings)
+            value = api.portal.get_registry_record(
+                name, interface=IChefCookieSettings
+            )
             if load_json:
                 value = json.loads(value)
             if isinstance(value, six.string_types) and six.PY2:
@@ -325,8 +327,8 @@ class View(BrowserView):
     def get_only_technical_cookies_values(self):
         value = self.get_registry_settings(name="only_technical_cookies")
         if not value:
-            return "true"
-        return "false"
+            return "false"
+        return "true"
 
     def get_tech_cookies_config(self):
 
@@ -404,7 +406,9 @@ class View(BrowserView):
 
         if linkedin_id and "linkedin" in profiling_cookies_specific_labels:
             scripts["linkedin"] = {"id": linkedin_id}
-            scripts["linkedin"].update(profiling_cookies_specific_labels["linkedin"])
+            scripts["linkedin"].update(
+                profiling_cookies_specific_labels["linkedin"]
+            )
 
         res = {
             "checked_by_default": False,
