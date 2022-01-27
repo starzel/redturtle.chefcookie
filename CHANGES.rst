@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 - Align text with label of buttons.
+- Removed cookie_setting_open button when only_technical_cookies is checked.
   [eikichi18]
 
 
