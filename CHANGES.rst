@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.2 (unreleased)
+0.2.2 (2022-01-27)
 ------------------
 
 - Align text with label of buttons.
