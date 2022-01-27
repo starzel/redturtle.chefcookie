@@ -293,9 +293,7 @@ class View(BrowserView):
     @view.memoize
     def get_registry_settings(self, name, load_json=False):
         try:
-            value = api.portal.get_registry_record(
-                name, interface=IChefCookieSettings
-            )
+            value = api.portal.get_registry_record(name, interface=IChefCookieSettings)
             if load_json:
                 value = json.loads(value)
             if isinstance(value, six.string_types) and six.PY2:
@@ -409,9 +407,7 @@ class View(BrowserView):
 
         if linkedin_id and "linkedin" in profiling_cookies_specific_labels:
             scripts["linkedin"] = {"id": linkedin_id}
-            scripts["linkedin"].update(
-                profiling_cookies_specific_labels["linkedin"]
-            )
+            scripts["linkedin"].update(profiling_cookies_specific_labels["linkedin"])
 
         res = {
             "checked_by_default": False,
