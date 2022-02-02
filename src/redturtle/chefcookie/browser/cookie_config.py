@@ -453,7 +453,7 @@ class View(BrowserView):
         data = self.get_registry_settings(name="iframes_mapping")
 
         res = []
-        for mapping in data:
+        for mapping in filter(bool, data):
             id, domains = mapping.split("|")
             res.append(id)
         return res
