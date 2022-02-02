@@ -60,6 +60,16 @@ LABELS = {
             "it": "<p>I cookie di Analytics sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
         },
     },
+    "matomo_cookies": {
+        "title": {
+            "en": "Matomo",
+            "it": "Matomo",
+        },
+        "description": {
+            "en": "<p>We use Matomo cookies to track user navigation and make some analysis. We don't track any personal information about the user.</p>",
+            "it": "<p>I cookie di Matomo sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
+        },
+    },
     "profiling_cookies": {
         "title": {"en": "Profiling Cookies", "it": "Cookie di profilazione"},
         "description": {
@@ -117,6 +127,9 @@ if six.PY2:
     ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4).decode(
         "utf-8"
     )
+    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4).decode(
+        "utf-8"
+    )
     PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4).decode(
         "utf-8"
     )
@@ -129,6 +142,7 @@ else:
     TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4)
     FUNCTIONAL_COOKIES_LABELS = json.dumps(LABELS["functional_cookies"], indent=4)
     ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4)
+    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4)
     PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4)
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4

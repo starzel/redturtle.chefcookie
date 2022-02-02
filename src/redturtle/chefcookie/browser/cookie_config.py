@@ -280,20 +280,16 @@ class View(BrowserView):
                 self.get_tech_cookies_config(),
             )
             .replace("{settings_placeholder}", self.get_settings())
-            .replace(
-                "{open_settings_placeholder}",
-                manage_cookie_label,
-            )
-            .replace(
-                "{data_cc_open_placeholder}",
-                manage_cc_open,
-            )
+            .replace("{open_settings_placeholder}", manage_cookie_label,)
+            .replace("{data_cc_open_placeholder}", manage_cc_open,)
         )
 
     @view.memoize
     def get_registry_settings(self, name, load_json=False):
         try:
-            value = api.portal.get_registry_record(name, interface=IChefCookieSettings)
+            value = api.portal.get_registry_record(
+                name, interface=IChefCookieSettings
+            )
             if load_json:
                 value = json.loads(value)
             if isinstance(value, six.string_types) and six.PY2:
@@ -343,10 +339,14 @@ class View(BrowserView):
         analytics_cookies_labels = self.get_registry_settings(
             name="analytics_cookies_labels"
         )
+        matomo_cookies_labels = self.get_registry_settings(
+            name="matomo_cookies_labels"
+        )
         functional_cookies_labels = self.get_registry_settings(
             name="functional_cookies_labels"
         )
         analytics_id = self.get_registry_settings(name="analytics_id")
+        matomo_id = self.get_registry_settings(name="matomo_id")
 
         if labels:
             res.update(json.loads(labels))
@@ -354,13 +354,21 @@ class View(BrowserView):
         scripts = {}
         if functional_cookies_labels:
             scripts["techcookies"] = json.loads(functional_cookies_labels)
+
         if analytics_id and analytics_cookies_labels:
             analytics_data = {"id": analytics_id}
             analytics_data.update(json.loads(analytics_cookies_labels))
             scripts["analytics"] = analytics_data
 
+        if matomo_id and matomo_cookies_labels:
+            matomo_data = {"id": matomo_id}
+            matomo_data.update(json.loads(matomo_cookies_labels))
+            scripts["matomo"] = matomo_data
+
         if scripts:
             res.update({"scripts": scripts})
+
+        print "{}".format(res)
         return json.dumps(res)
 
     def get_profiling_cookies_config(self):
@@ -407,7 +415,9 @@ class View(BrowserView):
 
         if linkedin_id and "linkedin" in profiling_cookies_specific_labels:
             scripts["linkedin"] = {"id": linkedin_id}
-            scripts["linkedin"].update(profiling_cookies_specific_labels["linkedin"])
+            scripts["linkedin"].update(
+                profiling_cookies_specific_labels["linkedin"]
+            )
 
         res = {
             "checked_by_default": False,

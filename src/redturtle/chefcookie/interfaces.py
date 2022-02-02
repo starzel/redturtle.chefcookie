@@ -7,6 +7,7 @@ from redturtle.chefcookie.defaults import FUNCTIONAL_COOKIES_LABELS
 from redturtle.chefcookie.defaults import IFRAMES_MAPPING
 from redturtle.chefcookie.defaults import ANCHOR_MAPPING
 from redturtle.chefcookie.defaults import ANALYTICS_COOKIES_LABELS
+from redturtle.chefcookie.defaults import MATOMO_COOKIES_LABELS
 from redturtle.chefcookie.defaults import PROFILING_COOKIES_LABELS
 from redturtle.chefcookie.defaults import PROFILING_COOKIES_SPECIFIC_LABELS
 from zope import schema
@@ -53,7 +54,14 @@ class IChefCookieSettingsConfigs(Schema):
         ),
         required=False,
     )
-
+    matomo_id = schema.TextLine(
+        title=_("chefcookie_matomo_id_label", default=u"Matomo Id"),
+        description=_(
+            "chefcookie_matomo_id_help",
+            default=u"If set and the user has accepted the Matomo cookies, this id will be used to track the user.",
+        ),
+        required=False,
+    )
     facebook_id = schema.TextLine(
         title=_("chefcookie_facebook_id_label", default=u"Facebook Id"),
         description=_(
@@ -191,7 +199,19 @@ class IChefCookieSettingsLabels(Schema):
         constraint=validate_cfg_json,
         required=True,
     )
-
+    matomo_cookies_labels = schema.SourceText(
+        title=_(
+            "chefcookie_matomo_cookies_labels",
+            default=u"Matomo cookies labels",
+        ),
+        description=_(
+            "chefcookie_matomo_cookies_labels_help",
+            default='If compiled, this will enable the "Matomo" flag in the banner.',
+        ),
+        default=MATOMO_COOKIES_LABELS,
+        constraint=validate_cfg_json,
+        required=True,
+    )
     profiling_cookies_labels = schema.SourceText(
         title=_(
             "chefcookie_profiling_cookies_labels",
