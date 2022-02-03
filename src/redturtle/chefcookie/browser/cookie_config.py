@@ -255,9 +255,7 @@ class View(BrowserView):
         endpoint = self.get_registry_settings("registry_endpoint")
         consent_traccking_url = endpoint and '"{}"'.format(endpoint) or "null"
 
-        cookie_prefix = '"{}"'.format(
-            self.get_registry_settings("cookie_name")
-        )
+        cookie_prefix = '"{}"'.format(self.get_registry_settings("cookie_name"))
 
         if six.PY2:
             manage_cookie_label = manage_cookie_label.encode("utf-8")
@@ -288,8 +286,14 @@ class View(BrowserView):
                 self.get_tech_cookies_config(),
             )
             .replace("{settings_placeholder}", self.get_settings())
-            .replace("{open_settings_placeholder}", manage_cookie_label,)
-            .replace("{data_cc_open_placeholder}", manage_cc_open,)
+            .replace(
+                "{open_settings_placeholder}",
+                manage_cookie_label,
+            )
+            .replace(
+                "{data_cc_open_placeholder}",
+                manage_cc_open,
+            )
             .replace("{consent_tracking_placeholder}", consent_traccking_url)
             .replace("{cookie_prefix}", cookie_prefix)
         )
@@ -297,9 +301,7 @@ class View(BrowserView):
     @view.memoize
     def get_registry_settings(self, name, load_json=False):
         try:
-            value = api.portal.get_registry_record(
-                name, interface=IChefCookieSettings
-            )
+            value = api.portal.get_registry_record(name, interface=IChefCookieSettings)
             if load_json:
                 value = json.loads(value)
             if isinstance(value, six.string_types) and six.PY2:
@@ -349,9 +351,7 @@ class View(BrowserView):
         analytics_cookies_labels = self.get_registry_settings(
             name="analytics_cookies_labels"
         )
-        matomo_cookies_labels = self.get_registry_settings(
-            name="matomo_cookies_labels"
-        )
+        matomo_cookies_labels = self.get_registry_settings(name="matomo_cookies_labels")
         functional_cookies_labels = self.get_registry_settings(
             name="functional_cookies_labels"
         )
@@ -424,9 +424,7 @@ class View(BrowserView):
 
         if linkedin_id and "linkedin" in profiling_cookies_specific_labels:
             scripts["linkedin"] = {"id": linkedin_id}
-            scripts["linkedin"].update(
-                profiling_cookies_specific_labels["linkedin"]
-            )
+            scripts["linkedin"].update(profiling_cookies_specific_labels["linkedin"])
 
         res = {
             "checked_by_default": False,

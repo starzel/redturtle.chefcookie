@@ -49,9 +49,7 @@ class LogInfo(object):
             backupCount=backupCount,
             delay=True,  # defer file creation to first emit
         )
-        formatter = logging.Formatter(
-            "%(asctime)s - %(levelname)s - %(message)s"
-        )
+        formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
         self.handler.setFormatter(formatter)
         self.logger.addHandler(self.handler)
         cclogger.info("Logging information to " + self.logfile)
@@ -72,7 +70,8 @@ class LogInfo(object):
                 # containers is likely to have the same PID.
                 # https://pypi.python.org/pypi/zc.lockfile#hostname-in-lock-file
                 lock = zc.lockfile.LockFile(
-                    lockfilename, content_template="{pid};{hostname}",
+                    lockfilename,
+                    content_template="{pid};{hostname}",
                 )
                 try:
                     self.logger.info(*args, **kwargs)
@@ -92,8 +91,7 @@ log_info = LogInfo()
 
 
 class ConsentTracking(BrowserView):
-    """
-    """
+    """ """
 
     def __call__(self):
         alsoProvides(self.request, IDisableCSRFProtection)

@@ -10,9 +10,7 @@ DEFAULT_PROFILE = "profile-redturtle.chefcookie:default"
 
 
 def update_profile(context, profile, run_dependencies=True):
-    context.runImportStepFromProfile(
-        DEFAULT_PROFILE, profile, run_dependencies
-    )
+    context.runImportStepFromProfile(DEFAULT_PROFILE, profile, run_dependencies)
 
 
 def update_registry(context):
@@ -22,6 +20,4 @@ def update_registry(context):
 
 def update_to_1002(context):
     update_registry(context)
-    api.portal.set_registry_record(
-        "enable_cc", True, interface=IChefCookieSettings
-    )
+    api.portal.set_registry_record("enable_cc", True, interface=IChefCookieSettings)

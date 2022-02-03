@@ -59,7 +59,9 @@ class GetChefcookieJs(ViewletBase):
         return (
             CHEFCOOKIE_URL.format(portal_url=portal_url, version=version),
             RT_CHEFCOOKIE_URL.format(
-                portal_url=portal_url, type=self.get_type(), version=version,
+                portal_url=portal_url,
+                type=self.get_type(),
+                version=version,
             ),
             CONFIG_URL.format(
                 portal_url=portal_url,

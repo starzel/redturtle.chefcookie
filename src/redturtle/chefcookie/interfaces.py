@@ -33,15 +33,11 @@ def validate_cfg_json(value):
             _(
                 "invalid_json",
                 "JSON is not valid, parser complained: ${message}",
-                mapping={
-                    "message": "{msg} {pos}".format(msg=e.msg, pos=e.pos)
-                },
+                mapping={"message": "{msg} {pos}".format(msg=e.msg, pos=e.pos)},
             )
         )
     if not isinstance(jv, dict):
-        raise Invalid(
-            _("invalid_cfg_no_dict", "JSON root must be a mapping (dict)")
-        )
+        raise Invalid(_("invalid_cfg_no_dict", "JSON root must be a mapping (dict)"))
     return True
 
 
@@ -51,7 +47,10 @@ class IRedturtleChefcookieLayer(IDefaultBrowserLayer):
 
 class IChefCookieSettingsConfigs(Schema):
     enable_cc = schema.Bool(
-        title=_("chefcookie_enable_label", default=u"Enable chefcookie",),
+        title=_(
+            "chefcookie_enable_label",
+            default=u"Enable chefcookie",
+        ),
         description=_(
             "chefcookie_only_enable_chefcookie_help",
             default=u"Select to use chefcookie",
@@ -61,15 +60,14 @@ class IChefCookieSettingsConfigs(Schema):
     cookie_name = schema.TextLine(
         title=_("chefcookie_cookie_prefix_label", default=u"Cookie prefix"),
         description=_(
-            "chefcookie_cookie_prefix_help", default=u"Set the cookie prefix",
+            "chefcookie_cookie_prefix_help",
+            default=u"Set the cookie prefix",
         ),
         default=u"cc_",
         required=True,
     )
     registry_endpoint = schema.TextLine(
-        title=_(
-            "chefcookie_registry_endpoint_label", default=u"Registry endpoint"
-        ),
+        title=_("chefcookie_registry_endpoint_label", default=u"Registry endpoint"),
         description=_(
             "chefcookie_registry_endpoint_help",
             default=u"If set and chefcookie will send usage data to endpoint",
@@ -77,9 +75,7 @@ class IChefCookieSettingsConfigs(Schema):
         required=False,
     )
     domain_whitelist = schema.List(
-        title=_(
-            "chefcookie_domain_whitelist_labels", default=u"Domain whitelist"
-        ),
+        title=_("chefcookie_domain_whitelist_labels", default=u"Domain whitelist"),
         description=_(
             "chefcookie_domain_whitelist_labels_help",
             default=u"Insert a list of domains for which the banner should be used. Useful when we can visit a site with multiple domains",
@@ -154,9 +150,7 @@ class IChefCookieSettingsConfigs(Schema):
     )
 
     iframes_mapping = schema.List(
-        title=_(
-            "chefcookie_iframes_mapping_labels", default=u"Iframes mapping"
-        ),
+        title=_("chefcookie_iframes_mapping_labels", default=u"Iframes mapping"),
         description=_(
             "chefcookie_iframes_mapping_labels_help",
             default=u"Insert a list of mappings between a provider and a list of possible domains for their iframes. If the user blocks their cookies, the iframes will be blocked as well.",
@@ -195,7 +189,10 @@ class IChefCookieSettingsLabels(Schema):
 
     general_labels = schema.SourceText(
         title=_("chefcookie_general_labels", default=u"General labels"),
-        description=_("chefcookie_general_labels_help", default=u"",),
+        description=_(
+            "chefcookie_general_labels_help",
+            default=u"",
+        ),
         default=GENERAL_LABELS,
         constraint=validate_cfg_json,
         required=True,
@@ -207,7 +204,8 @@ class IChefCookieSettingsLabels(Schema):
             default=u"Technical cookies labels",
         ),
         description=_(
-            "chefcookie_technical_cookies_labels_help", default=u"",
+            "chefcookie_technical_cookies_labels_help",
+            default=u"",
         ),
         default=TECHNICAL_COOKIES_LABELS,
         constraint=validate_cfg_json,
@@ -259,7 +257,8 @@ class IChefCookieSettingsLabels(Schema):
             default=u"Profiling cookies labels",
         ),
         description=_(
-            "chefcookie_profiling_cookies_labels_help", default=u"",
+            "chefcookie_profiling_cookies_labels_help",
+            default=u"",
         ),
         default=PROFILING_COOKIES_LABELS,
         constraint=validate_cfg_json,
@@ -281,7 +280,5 @@ class IChefCookieSettingsLabels(Schema):
     )
 
 
-class IChefCookieSettings(
-    IChefCookieSettingsConfigs, IChefCookieSettingsLabels
-):
+class IChefCookieSettings(IChefCookieSettingsConfigs, IChefCookieSettingsLabels):
     """"""
