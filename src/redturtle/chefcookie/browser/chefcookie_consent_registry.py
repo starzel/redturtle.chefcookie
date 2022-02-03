@@ -25,7 +25,7 @@ class LogInfo(object):
 
     def configure(self):
         config = {
-            "file-log": "{}".format(
+            "file-log": "{}{}".format(
                 os.environ.get("CLIENT_HOME"),
                 "/../log/redturtle.chefcookie.log",
             ),
