@@ -39,9 +39,8 @@ setup(
     url="https://github.com/collective/redturtle.chefcookie",
     project_urls={
         "PyPI": "https://pypi.python.org/pypi/redturtle.chefcookie",
-        "Source": "https://github.com/collective/redturtle.chefcookie",
-        "Tracker": "https://github.com/collective/redturtle.chefcookie/issues",
-        # 'Documentation': 'https://redturtle.chefcookie.readthedocs.io/en/latest/',
+        "Source": "https://github.com/RedTurtle/redturtle.chefcookie",
+        "Tracker": "https://github.com/RedTurtle/redturtle.chefcookie/issues",
     },
     license="GPL version 2",
     packages=find_packages("src", exclude=["ez_setup", "node_modules"]),
