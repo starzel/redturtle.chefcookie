@@ -25,8 +25,10 @@ class LogInfo(object):
 
     def configure(self):
         config = {
-            "file-log": os.environ.get("CLIENT_HOME")
-            + "/../log/redturtle.chefcookie.log",
+            "file-log": "{}".format(
+                os.environ.get("CLIENT_HOME"),
+                "/../log/redturtle.chefcookie.log",
+            ),
             "file-log-max-size": 20971520,
             "file-log-old-files": 365,
         }
