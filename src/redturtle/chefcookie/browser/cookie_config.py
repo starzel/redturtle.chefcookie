@@ -148,8 +148,9 @@ var cc = new redturtlechefcookie({
   accept_all_if_settings_closed: false,
   show_decline_button: true,
   scripts_selection: "true", // false|true|'collapse'
-  debug_log: true,
-  consent_tracking: null, // '/wp-json/v1/track-consent.php'
+  debug_log: false,
+  cookie_prefix: {cookie_prefix},
+  consent_tracking: {consent_tracking_placeholder}, // '/wp-json/v1/track-consent.php'
   expiration: 180, // in days
   exclude_google_pagespeed: false,
   style: {
@@ -251,6 +252,13 @@ class View(BrowserView):
         if self.get_only_technical_cookies_values():
             manage_cc_open = "data-cc-open"
 
+        endpoint = self.get_registry_settings("registry_endpoint")
+        consent_traccking_url = endpoint and '"{}"'.format(endpoint) or "null"
+
+        cookie_prefix = '"{}"'.format(
+            self.get_registry_settings("cookie_name")
+        )
+
         if six.PY2:
             manage_cookie_label = manage_cookie_label.encode("utf-8")
         return (
@@ -282,6 +290,8 @@ class View(BrowserView):
             .replace("{settings_placeholder}", self.get_settings())
             .replace("{open_settings_placeholder}", manage_cookie_label,)
             .replace("{data_cc_open_placeholder}", manage_cc_open,)
+            .replace("{consent_tracking_placeholder}", consent_traccking_url)
+            .replace("{cookie_prefix}", cookie_prefix)
         )
 
     @view.memoize
@@ -368,7 +378,6 @@ class View(BrowserView):
         if scripts:
             res.update({"scripts": scripts})
 
-        print "{}".format(res)
         return json.dumps(res)
 
     def get_profiling_cookies_config(self):
@@ -462,7 +471,7 @@ class View(BrowserView):
         data = self.get_registry_settings(name="links_mapping")
 
         res = []
-        for mapping in data:
+        for mapping in filter(bool, data):
             id, domains = mapping.split("|")
             res.append(id)
         return res

@@ -4,8 +4,14 @@ Changelog
 0.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- add flag to control panel that allow to enable cookie banner
+- add cookie prefix to control panel to control the js plugin option
+- allow to select endpoint for consent registry
+- add domain whitelist so in case you have site with multiple domain can show 
+  the banner in selected domain
+- add matomo
+- some minor fix to prevent cases where site editor remove configuration lines 
+  partially
 
 0.2.2 (2022-01-27)
 ------------------

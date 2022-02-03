@@ -113,7 +113,7 @@ IFRAMES_MAPPING = [
     u"youtube|youtube.com,youtube-nocookie.com, youtu.be",
     u"facebook|facebook.com",
 ]
-ANCHOR_MAPPING = [u"twitter|twitter-timeline"]
+ANCHOR_MAPPING = [u"twittertimeline|twitter-timeline"]
 
 if six.PY2:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4).decode("utf-8")

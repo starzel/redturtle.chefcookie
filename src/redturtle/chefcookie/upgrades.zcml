@@ -21,7 +21,7 @@
       >
     <genericsetup:upgradeStep
         title="Update registry to add field to handle anchor transformation"
-        handler=".upgrades.update_registry"
+        handler=".upgrades.update_to_1002"
         />
   </genericsetup:upgradeSteps>
 </configure>
