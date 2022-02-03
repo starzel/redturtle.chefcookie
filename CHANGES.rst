@@ -4,7 +4,8 @@ Changelog
 0.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not use $ but vanilla javascript for old Plone sites compatibility.
+  [cekk]
 
 
 0.2.2 (2022-01-27)
