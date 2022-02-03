@@ -98,7 +98,7 @@ class ChefcookieIframeTransform(object):
         )
         if (
             not self.chefcookie_registry_record.enable_cc
-            and self.domain_allowed(
+            and self.domain_allowed(  # noqa
                 self.chefcookie_registry_record.domain_whitelist,
                 urlparse(self.request.get("URL")).netloc,
             )
