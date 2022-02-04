@@ -219,7 +219,7 @@ function getCookie(name) {
     ) {
       cc.setCookieToHideOverlay();
       cc.close();
-      cc.logTracking('decline_by_x', getCookie(cc.getCookieName('accepted_providers')));
+      cc.logTracking('close_by_x', getCookie(cc.getCookieName('accepted_providers')));
       e.preventDefault();
     }
     if (e.target.hasAttribute("data-cc-accept-all")) {
