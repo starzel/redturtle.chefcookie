@@ -188,6 +188,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
   cc.registerEventListener(document, "click", e => {
     if (
       e.target.hasAttribute("data-cc-open-settings") ||
@@ -213,14 +219,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       cc.setCookieToHideOverlay();
       cc.close();
-      cc.logTracking('decline_by_x');
+      cc.logTracking('decline_by_x', getCookie(cc.getCookieName('accepted_providers')));
       e.preventDefault();
     }
     if (e.target.hasAttribute("data-cc-accept-all")) {
       cc.acceptAllScripts();
       cc.setCookieToHideOverlay();
       cc.close();
-      cc.logTracking('accept_all');
+      cc.logTracking('accept_all', getCookie(cc.getCookieName('accepted_providers')));
       e.preventDefault();
     }
   });
