@@ -86,12 +86,9 @@ class ChefcookieIframeTransform(object):
             return result
 
         self.chefcookie_registry_record = registry.forInterface(IChefCookieSettings)
-        if (
-            not self.chefcookie_registry_record.enable_cc
-            and domain_allowed(  # noqa
-                self.chefcookie_registry_record.domain_whitelist,
-                urlparse(self.request.get("URL")).netloc,
-            )
+        if not self.chefcookie_registry_record.enable_cc and domain_allowed(  # noqa
+            self.chefcookie_registry_record.domain_whitelist,
+            urlparse(self.request.get("URL")).netloc,
         ):
             return
 
