@@ -12,6 +12,7 @@ Changelog
 - add matomo
 - some minor fix to prevent cases where site editor remove configuration lines 
   partially
+- add log tracking to new introduced actions
 
 0.2.2 (2022-01-27)
 ------------------
