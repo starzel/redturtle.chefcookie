@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from lxml import etree, html
 from plone.transformchain.interfaces import ITransform
-from redturtle.chefcookie.defaults import iframe_placeholder
+from redturtle.chefcookie.defaults import iframe_placeholder, domain_allowed
 from repoze.xmliter.utils import getHTMLSerializer
 from zope.component import adapter
 from zope.interface import implementer
@@ -63,14 +63,6 @@ class ChefcookieIframeTransform(object):
         iframe.addprevious(placeholder)
         return
 
-    def domain_allowed(self, domain_whitelist, current_url):
-        if not filter(bool, domain_whitelist):
-            return True
-        for domain in domain_whitelist:
-            if domain in current_url:
-                return True
-        return False
-
     def transformIterable(self, result, encoding):
         # we pass through this code for every call client made to server,
         # so also for resource.
@@ -96,7 +88,7 @@ class ChefcookieIframeTransform(object):
         self.chefcookie_registry_record = registry.forInterface(IChefCookieSettings)
         if (
             not self.chefcookie_registry_record.enable_cc
-            and self.domain_allowed(  # noqa
+            and domain_allowed(  # noqa
                 self.chefcookie_registry_record.domain_whitelist,
                 urlparse(self.request.get("URL")).netloc,
             )

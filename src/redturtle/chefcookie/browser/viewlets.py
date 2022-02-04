@@ -3,6 +3,7 @@ from plone import api
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.memoize import ram
 from redturtle.chefcookie.interfaces import IChefCookieSettings
+from redturtle.chefcookie.defaults import domain_allowed
 from time import time
 import pkg_resources
 import six
@@ -27,20 +28,11 @@ class GetChefcookieJs(ViewletBase):
     def get_version(self):
         return pkg_resources.get_distribution("redturtle.chefcookie").version
 
-    def domain_allowed(self, domain_whitelist, current_url):
-
-        if not filter(bool, domain_whitelist):
-            return True
-        for domain in domain_whitelist:
-            if domain in current_url:
-                return True
-        return False
-
     def have_chefcookie_configuration(self):
         try:
             cc = self.context.portal_registry.forInterface(IChefCookieSettings)
 
-            if cc.enable_cc and self.domain_allowed(
+            if cc.enable_cc and domain_allowed(
                 cc.domain_whitelist, urlparse(self.request.get("URL")).netloc
             ):
                 return True

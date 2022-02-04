@@ -61,10 +61,7 @@ LABELS = {
         },
     },
     "matomo_cookies": {
-        "title": {
-            "en": "Matomo",
-            "it": "Matomo",
-        },
+        "title": {"en": "Matomo", "it": "Matomo"},
         "description": {
             "en": "<p>We use Matomo cookies to track user navigation and make some analysis. We don't track any personal information about the user.</p>",
             "it": "<p>I cookie di Matomo sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
@@ -118,32 +115,40 @@ ANCHOR_MAPPING = [u"twittertimeline|twitter-timeline"]
 if six.PY2:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4).decode("utf-8")
     GENERAL_LABELS = json.dumps(LABELS["general"], indent=4).decode("utf-8")
-    TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4).decode(
-        "utf-8"
-    )
+    TECHNICAL_COOKIES_LABELS = json.dumps(
+        LABELS["technical_cookies"], indent=4
+    ).decode("utf-8")
     FUNCTIONAL_COOKIES_LABELS = json.dumps(
         LABELS["functional_cookies"], indent=4
     ).decode("utf-8")
-    ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4).decode(
-        "utf-8"
-    )
-    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4).decode(
-        "utf-8"
-    )
-    PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4).decode(
-        "utf-8"
-    )
+    ANALYTICS_COOKIES_LABELS = json.dumps(
+        LABELS["analytics_cookies"], indent=4
+    ).decode("utf-8")
+    MATOMO_COOKIES_LABELS = json.dumps(
+        LABELS["matomo_cookies"], indent=4
+    ).decode("utf-8")
+    PROFILING_COOKIES_LABELS = json.dumps(
+        LABELS["profiling_cookies"], indent=4
+    ).decode("utf-8")
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4
     ).decode("utf-8")
 else:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4)
     GENERAL_LABELS = json.dumps(LABELS["general"], indent=4)
-    TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4)
-    FUNCTIONAL_COOKIES_LABELS = json.dumps(LABELS["functional_cookies"], indent=4)
-    ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4)
+    TECHNICAL_COOKIES_LABELS = json.dumps(
+        LABELS["technical_cookies"], indent=4
+    )
+    FUNCTIONAL_COOKIES_LABELS = json.dumps(
+        LABELS["functional_cookies"], indent=4
+    )
+    ANALYTICS_COOKIES_LABELS = json.dumps(
+        LABELS["analytics_cookies"], indent=4
+    )
     MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4)
-    PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4)
+    PROFILING_COOKIES_LABELS = json.dumps(
+        LABELS["profiling_cookies"], indent=4
+    )
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4
     )
@@ -171,42 +176,28 @@ def iframe_placeholder(name, soup=None):
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _(
-            "iframe_placeholder_text_2",
-            default=u"Please",
-        ),
-        context=request,
+        _("iframe_placeholder_text_2", default=u"Please",), context=request,
     )
     tag.append(span_tag)
 
     a_tag_enable_yt = soup.new_tag("a", href="#")
     a_tag_enable_yt["data-cc-enable"] = name
     a_tag_enable_yt.string = translate(
-        _(
-            "iframe_placeholder_text_3",
-            default=u"enable them",
-        ),
+        _("iframe_placeholder_text_3", default=u"enable them",),
         context=request,
     )
     tag.append(a_tag_enable_yt)
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _(
-            "iframe_placeholder_text_4",
-            default=u" or ",
-        ),
-        context=request,
+        _("iframe_placeholder_text_4", default=u" or ",), context=request,
     )
     tag.append(span_tag)
 
     a_tag_open_cc = soup.new_tag("a", href="#")
     a_tag_open_cc["data-cc-open"] = ""
     a_tag_open_cc.string = translate(
-        _(
-            "iframe_placeholder_text_5",
-            default=u"manage your preferences",
-        ),
+        _("iframe_placeholder_text_5", default=u"manage your preferences",),
         context=request,
     )
     tag.append(a_tag_open_cc)
@@ -238,43 +229,38 @@ def anchor_placeholder(provider_name):
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _(
-            "iframe_placeholder_text_2",
-            default=u"Please",
-        ),
-        context=request,
+        _("iframe_placeholder_text_2", default=u"Please",), context=request,
     )
     tag.append(span_tag)
 
     a_tag_enable_yt = soup.new_tag("a", href="#")
     a_tag_enable_yt["data-cc-enable"] = provider_name
     a_tag_enable_yt.string = translate(
-        _(
-            "iframe_placeholder_text_3",
-            default=u"enable them",
-        ),
+        _("iframe_placeholder_text_3", default=u"enable them",),
         context=request,
     )
     tag.append(a_tag_enable_yt)
 
     span_tag = soup.new_tag("span")
     span_tag.string = translate(
-        _(
-            "iframe_placeholder_text_4",
-            default=u" or ",
-        ),
-        context=request,
+        _("iframe_placeholder_text_4", default=u" or ",), context=request,
     )
     tag.append(span_tag)
 
     a_tag_open_cc = soup.new_tag("a", href="#")
     a_tag_open_cc["data-cc-open"] = ""
     a_tag_open_cc.string = translate(
-        _(
-            "iframe_placeholder_text_5",
-            default=u"manage your preferences",
-        ),
+        _("iframe_placeholder_text_5", default=u"manage your preferences",),
         context=request,
     )
     tag.append(a_tag_open_cc)
     return tag
+
+
+def domain_allowed(self, domain_whitelist, current_url):
+    if not filter(bool, domain_whitelist):
+        return True
+    for domain in domain_whitelist:
+        if domain in current_url:
+            return True
+    return False
