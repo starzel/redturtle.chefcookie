@@ -277,7 +277,7 @@ def anchor_placeholder(provider_name):
     return tag
 
 
-def domain_allowed(self, domain_whitelist, current_url):
+def domain_allowed(domain_whitelist, current_url):
     if not filter(bool, domain_whitelist):
         return True
     for domain in domain_whitelist:
