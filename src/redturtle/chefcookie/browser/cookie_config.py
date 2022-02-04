@@ -213,12 +213,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       cc.setCookieToHideOverlay();
       cc.close();
+      cc.logTracking('decline_by_x');
       e.preventDefault();
     }
     if (e.target.hasAttribute("data-cc-accept-all")) {
       cc.acceptAllScripts();
       cc.setCookieToHideOverlay();
       cc.close();
+      cc.logTracking('accept_all');
       e.preventDefault();
     }
   });
@@ -377,7 +379,6 @@ class View(BrowserView):
 
         if scripts:
             res.update({"scripts": scripts})
-
         return json.dumps(res)
 
     def get_profiling_cookies_config(self):
