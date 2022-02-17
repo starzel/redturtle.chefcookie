@@ -60,6 +60,13 @@ LABELS = {
             "it": "<p>I cookie di Analytics sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
         },
     },
+    "matomo_cookies": {
+        "title": {"en": "Matomo", "it": "Matomo"},
+        "description": {
+            "en": "<p>We use Matomo cookies to track user navigation and make some analysis. We don't track any personal information about the user.</p>",
+            "it": "<p>I cookie di Matomo sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
+        },
+    },
     "profiling_cookies": {
         "title": {"en": "Profiling Cookies", "it": "Cookie di profilazione"},
         "description": {
@@ -103,7 +110,7 @@ IFRAMES_MAPPING = [
     u"youtube|youtube.com,youtube-nocookie.com, youtu.be",
     u"facebook|facebook.com",
 ]
-ANCHOR_MAPPING = [u"twitter|twitter-timeline"]
+ANCHOR_MAPPING = [u"twittertimeline|twitter-timeline"]
 
 if six.PY2:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4).decode("utf-8")
@@ -115,6 +122,9 @@ if six.PY2:
         LABELS["functional_cookies"], indent=4
     ).decode("utf-8")
     ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4).decode(
+        "utf-8"
+    )
+    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4).decode(
         "utf-8"
     )
     PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4).decode(
@@ -129,6 +139,7 @@ else:
     TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4)
     FUNCTIONAL_COOKIES_LABELS = json.dumps(LABELS["functional_cookies"], indent=4)
     ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4)
+    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4)
     PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4)
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4
@@ -264,3 +275,12 @@ def anchor_placeholder(provider_name):
     )
     tag.append(a_tag_open_cc)
     return tag
+
+
+def domain_allowed(domain_whitelist, current_url):
+    if not filter(bool, domain_whitelist):
+        return True
+    for domain in domain_whitelist:
+        if domain in current_url:
+            return True
+    return False

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from lxml import etree, html
 from plone.transformchain.interfaces import ITransform
-from redturtle.chefcookie.defaults import iframe_placeholder
+from redturtle.chefcookie.defaults import iframe_placeholder, domain_allowed
 from repoze.xmliter.utils import getHTMLSerializer
 from zope.component import adapter
 from zope.interface import implementer
@@ -13,6 +13,12 @@ from zope.component import queryAdapter
 from redturtle.chefcookie.transformers import INodePlaceholder
 from zope.component.interfaces import ComponentLookupError
 from redturtle.chefcookie.interfaces import IRedturtleChefcookieLayer
+import six
+
+if six.PY2:
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
 
 
 @implementer(ITransform)
@@ -31,7 +37,7 @@ class ChefcookieIframeTransform(object):
         if the src matches configured domains, return the config name
         """
         iframes_mapping = self.chefcookie_registry_record.iframes_mapping
-        for mapping in iframes_mapping:
+        for mapping in filter(bool, iframes_mapping):
             name, domains = mapping.split("|")
             if not domains:
                 continue
@@ -79,12 +85,17 @@ class ChefcookieIframeTransform(object):
         if not self.published or self.published.__name__ in ["edit", "@@edit"]:
             return result
 
+        self.chefcookie_registry_record = registry.forInterface(IChefCookieSettings)
+        if not self.chefcookie_registry_record.enable_cc and domain_allowed(  # noqa
+            self.chefcookie_registry_record.domain_whitelist,
+            urlparse(self.request.get("URL")).netloc,
+        ):
+            return
+
         try:
             result = getHTMLSerializer(result)
         except (AttributeError, TypeError, etree.ParseError):
             return
-
-        self.chefcookie_registry_record = registry.forInterface(IChefCookieSettings)
 
         path = "//iframe"
         for iframe in result.tree.xpath(path):
@@ -93,7 +104,7 @@ class ChefcookieIframeTransform(object):
         path = "//a[@class='{}']"
         links_mapping = self.chefcookie_registry_record.links_mapping
 
-        for configuration in links_mapping:
+        for configuration in filter(bool, links_mapping):
             provider, provider_class = configuration.split("|")
             for anchor in result.tree.xpath(path.format(provider_class)):
                 ad = queryAdapter(
