@@ -19,27 +19,26 @@ var anchorCookies = {anchor_cookies_ids_placeholder};
 var profiling_cookies_config = {profiling_cookies_config_placeholder};
 
 function accept_anchor_based_provider(cc, placeholder_identifier){
-    $("div." + placeholder_identifier).each(function(){
-        var placeholder = $(this);
-        var anchor = placeholder.next();
-        var twitter = anchor.next();
-        var anchor_href = anchor.data().ccHref;
-        var twitter_src = twitter.data().ccSrc;
-        var name = anchor.data().ccName;
+    document.querySelectorAll("div." + placeholder_identifier).forEach(function(placeholder) {
+        var anchor = placeholder.nextElementSibling;
+        var twitter = anchor.nextElementSibling;
+        var anchor_href = anchor.dataset.ccHref;
+        var twitter_src = twitter.dataset.ccSrc;
+        var name = anchor.dataset.ccName;
         if(cc.isAccepted(name)){
-            anchor.attr('href', anchor_href);
-            anchor.attr('hidden', false);
-            twitter.attr('hidden', false);
-            twitter.attr('src', twitter_src);
-            placeholder.attr('hidden', true);
+            anchor.setAttribute('href', anchor_href);
+            anchor.removeAttribute('hidden');
+            twitter.removeAttribute('hidden');
+            twitter.setAttribute('src', twitter_src);
+            placeholder.setAttribute('hidden', true);
         }// else {
-        //   anchor.attr('href', '');
-        //   anchor.attr('hidden', true);
-        //   twitter.attr('hidden', true);
+        //   anchor.setAttribute('href', '');
+        //   anchor.setAttribute('hidden', true);
+        //   twitter.setAttribute('hidden', true);
            // we need to identify the iframe
         //   debugger;
-        //   twitter.attr('src', );
-        //   placeholder.attr('hidden', false);
+        //   twitter.setAttribute('src', );
+        //   placeholder.removeAttribute('hidden');
         // }
     });
 }
@@ -60,20 +59,19 @@ function decline_twitter_timeline(cc){
 }
 
 function accept_iframe(cc) {
-    $("iframe").each(function() {
-        var iframe = $(this);
-        var src = iframe.data().ccSrc;
-        var name = iframe.data().ccName;
-        var placeholder = $(this).prev('.iframe-placeholder');
-        if (placeholder.length && src) {
+    document.querySelectorAll('iframe').forEach(function(iframe) {
+        var src = iframe.dataset.ccSrc;
+        var name = iframe.dataset.ccName;
+        var placeholder = iframe.previousElementSibling;
+        if (placeholder && src) {
             if(cc.isAccepted(name)){
-                iframe.attr('src', src);
-                iframe.attr('hidden', false);
-                placeholder.attr('hidden', true);
+                iframe.setAttribute('src', src);
+                iframe.removeAttribute('hidden');
+                placeholder.setAttribute('hidden', true);
             } else {
-                iframe.attr('src', '');
-                iframe.attr('hidden', true);
-                placeholder.attr('hidden', false);
+                iframe.setAttribute('src', '');
+                iframe.setAttribute('hidden', true);
+                placeholder.removeAttribute('hidden');
             }
         }
     });
@@ -231,7 +229,7 @@ function getCookie(name) {
     }
   });
 
-  $('body').append('<a title="{open_settings_placeholder}" id="cookie-settings-open" {data_cc_open_placeholder}=“” href=“/”><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-lock" class="svg-inline--fa fa-user-lock fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 96 128a128 128 0 0 0 128 128zm96 64a63.08 63.08 0 0 1 8.1-30.5c-4.8-.5-9.5-1.5-14.5-1.5h-16.7a174.08 174.08 0 0 1-145.8 0h-16.7A134.43 134.43 0 0 0 0 422.4V464a48 48 0 0 0 48 48h280.9a63.54 63.54 0 0 1-8.9-32zm288-32h-32v-80a80 80 0 0 0-160 0v80h-32a32 32 0 0 0-32 32v160a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V320a32 32 0 0 0-32-32zM496 432a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm32-144h-64v-80a32 32 0 0 1 64 0z"></path></svg></a>');
+  document.body.insertAdjacentHTML("beforeend", '<a title="{open_settings_placeholder}" id="cookie-settings-open" {data_cc_open_placeholder}=“” href=“/”><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-lock" class="svg-inline--fa fa-user-lock fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 96 128a128 128 0 0 0 128 128zm96 64a63.08 63.08 0 0 1 8.1-30.5c-4.8-.5-9.5-1.5-14.5-1.5h-16.7a174.08 174.08 0 0 1-145.8 0h-16.7A134.43 134.43 0 0 0 0 422.4V464a48 48 0 0 0 48 48h280.9a63.54 63.54 0 0 1-8.9-32zm288-32h-32v-80a80 80 0 0 0-160 0v80h-32a32 32 0 0 0-32 32v160a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V320a32 32 0 0 0-32-32zM496 432a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm32-144h-64v-80a32 32 0 0 1 64 0z"></path></svg></a>');
 
 });
 """
