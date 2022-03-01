@@ -18,6 +18,13 @@ var iframeCookies = {iframe_cookies_ids_placeholder};
 var anchorCookies = {anchor_cookies_ids_placeholder};
 var profiling_cookies_config = {profiling_cookies_config_placeholder};
 
+function accept_all_anchor_based_provider_when_tiles_loaded(cc){
+    var placeholder_identifiers = ['twittertimeline-placeholder'];
+    for (let i = 0; i < placeholder_identifiers.length; i++) {
+        accept_anchor_based_provider(cc, placeholder_identifiers);
+    }
+}
+
 function accept_anchor_based_provider(cc, placeholder_identifier){
     document.querySelectorAll("div." + placeholder_identifier).forEach(function(placeholder) {
         var anchor = placeholder.nextElementSibling;
@@ -28,8 +35,12 @@ function accept_anchor_based_provider(cc, placeholder_identifier){
         if(cc.isAccepted(name)){
             anchor.setAttribute('href', anchor_href);
             anchor.removeAttribute('hidden');
-            twitter.removeAttribute('hidden');
-            twitter.setAttribute('src', twitter_src);
+            // re-add the script to force its execution
+            twitter.parentNode.removeChild(twitter);
+            var newScript = document.createElement('script');
+            newScript.setAttribute('src', twitter_src);
+            newScript.setAttribute('async', '');
+            anchor.after(newScript);
             placeholder.setAttribute('hidden', true);
         }// else {
         //   anchor.setAttribute('href', '');
@@ -183,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".pat-tiles-management").forEach(el => {
     el.addEventListener("rtTilesLoaded", e => {
       accept_iframe(cc);
+      accept_all_anchor_based_provider_when_tiles_loaded(cc);
     });
   });
 
