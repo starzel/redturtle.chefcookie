@@ -3,6 +3,8 @@
 import logging
 from plone import api
 from redturtle.chefcookie.interfaces import IChefCookieSettings
+from plone.protect.interfaces import IDisableCSRFProtection
+from zope.interface import alsoProvides
 
 logger = logging.getLogger(__name__)
 
@@ -19,5 +21,6 @@ def update_registry(context):
 
 
 def update_to_1002(context):
+    alsoProvides(context.REQUEST, IDisableCSRFProtection)
     update_registry(context)
     api.portal.set_registry_record("enable_cc", True, interface=IChefCookieSettings)
