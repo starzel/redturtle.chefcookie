@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.3 (unreleased)
+0.2.3 (2022-03-24)
 ------------------
 
 - add flag to control panel that allow to enable cookie banner
