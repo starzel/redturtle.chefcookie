@@ -16,6 +16,10 @@ LABELS = {
     "general": {
         "accept": {"en": "Save and continue", "it": "Salva e continua"},
         "accept_all": {"en": "Allow all", "it": "Accetta tutto"},
+        "close": {
+            "en": "Close and accept only technical cookies",
+            "it": "Chiudi e accetta solo i cookie tecnici",
+        },
         "settings_open": {"en": "Personalizza", "it": "Personalizza"},
         "settings_close": {
             "en": "Close settings",
@@ -43,29 +47,14 @@ LABELS = {
             "it": "Il sito utilizza cookie tecnici per analizzare il traffico da e verso il sito. I cookie tecnici consento anche di fornire un migliore servizio di navigazione sul sito, e raccolgono informazioni di navigazione a questo scopo.",
         },
     },
-    "functional_cookies": {
-        "title": {"en": "Functional Cookies", "it": "Cookie funzionali"},
-        "description": {
-            "en": "<p>We use functionality cookies to enable specific website functions and to configure the Website depending on your choices.</p>",
-            "it": "<p>Utilizziamo cookie funzionali per abilitare specifiche funzionalità del sito e per configurarlo a seconda delle tue scelte.</p>",
-        },
-    },
-    "analytics_cookies": {
-        "title": {
-            "en": "Analytics and Site Statistics",
-            "it": "Cookie analytics e statistiche",
-        },
-        "description": {
-            "en": "<p>We use analytics cookies to track user navigation and make some analysis. We don't track any personal information about the user.</p>",
-            "it": "<p>I cookie di Analytics sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
-        },
-    },
-    "matomo_cookies": {
-        "title": {"en": "Matomo", "it": "Matomo"},
-        "description": {
-            "en": "<p>We use Matomo cookies to track user navigation and make some analysis. We don't track any personal information about the user.</p>",
-            "it": "<p>I cookie di Matomo sono usati per analizzare la navigazione sul sito al fine di migliorarla e fornire all'utente un'esperienza di navigazione migliore possibile.</p>",
-        },
+    "technical_cookies_specific": {
+        "techcookies": {
+            "title": {"en": "Functional Cookies", "it": "Cookie funzionali"},
+            "description": {
+                "en": "<p>We use functionality cookies to enable specific website functions and to configure the Website depending on your choices.</p>",
+                "it": "<p>Utilizziamo cookie funzionali per abilitare specifiche funzionalità del sito e per configurarlo a seconda delle tue scelte.</p>",
+            },
+        }
     },
     "profiling_cookies": {
         "title": {"en": "Profiling Cookies", "it": "Cookie di profilazione"},
@@ -118,15 +107,9 @@ if six.PY2:
     TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4).decode(
         "utf-8"
     )
-    FUNCTIONAL_COOKIES_LABELS = json.dumps(
-        LABELS["functional_cookies"], indent=4
+    TECHNICAL_COOKIES_SPECIFIC_LABELS = json.dumps(
+        LABELS["technical_cookies_specific"], indent=4
     ).decode("utf-8")
-    ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4).decode(
-        "utf-8"
-    )
-    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4).decode(
-        "utf-8"
-    )
     PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4).decode(
         "utf-8"
     )
@@ -137,9 +120,9 @@ else:
     HEADER_LABELS = json.dumps(PANEL_HEADER, indent=4)
     GENERAL_LABELS = json.dumps(LABELS["general"], indent=4)
     TECHNICAL_COOKIES_LABELS = json.dumps(LABELS["technical_cookies"], indent=4)
-    FUNCTIONAL_COOKIES_LABELS = json.dumps(LABELS["functional_cookies"], indent=4)
-    ANALYTICS_COOKIES_LABELS = json.dumps(LABELS["analytics_cookies"], indent=4)
-    MATOMO_COOKIES_LABELS = json.dumps(LABELS["matomo_cookies"], indent=4)
+    TECHNICAL_COOKIES_SPECIFIC_LABELS = json.dumps(
+        LABELS["technical_cookies_specific"], indent=4
+    )
     PROFILING_COOKIES_LABELS = json.dumps(LABELS["profiling_cookies"], indent=4)
     PROFILING_COOKIES_SPECIFIC_LABELS = json.dumps(
         LABELS["profiling_cookies_specific"], indent=4
@@ -151,7 +134,7 @@ def iframe_placeholder(name, soup=None):
     if not soup:
         soup = BeautifulSoup("", "html.parser")
     tag = soup.new_tag("div")
-    tag["class"] = "iframe-placeholder"
+    tag["class"] = "iframe-placeholder {}".format(name)
     tag[
         "style"
     ] = "padding: 10px; background-color: #eee; border:1px solid #ccc;width:98%; max-width:500px"
@@ -159,7 +142,7 @@ def iframe_placeholder(name, soup=None):
     p_tag.string = translate(
         _(
             "iframe_placeholder_text_1",
-            default=u"You need to enable ${name} cookies to see this content.",
+            default="You need to enable ${name} cookies to see this content.",
             mapping={"name": name},
         ),
         context=request,
@@ -170,7 +153,7 @@ def iframe_placeholder(name, soup=None):
     span_tag.string = translate(
         _(
             "iframe_placeholder_text_2",
-            default=u"Please",
+            default="Please",
         ),
         context=request,
     )
@@ -181,7 +164,7 @@ def iframe_placeholder(name, soup=None):
     a_tag_enable_yt.string = translate(
         _(
             "iframe_placeholder_text_3",
-            default=u"enable them",
+            default="enable them",
         ),
         context=request,
     )
@@ -191,18 +174,18 @@ def iframe_placeholder(name, soup=None):
     span_tag.string = translate(
         _(
             "iframe_placeholder_text_4",
-            default=u" or ",
+            default=" or ",
         ),
         context=request,
     )
     tag.append(span_tag)
 
     a_tag_open_cc = soup.new_tag("a", href="#")
-    a_tag_open_cc["data-cc-open"] = ""
+    a_tag_open_cc["data-cc-open-settings"] = ""
     a_tag_open_cc.string = translate(
         _(
             "iframe_placeholder_text_5",
-            default=u"manage your preferences",
+            default="manage your preferences",
         ),
         context=request,
     )
@@ -226,7 +209,7 @@ def anchor_placeholder(provider_name):
     p_tag.string = translate(
         _(
             "iframe_placeholder_text_1",
-            default=u"You need to enable ${name} cookies to see this content.",
+            default="You need to enable ${name} cookies to see this content.",
             mapping={"name": human_readable_provider_name},
         ),
         context=request,
@@ -237,7 +220,7 @@ def anchor_placeholder(provider_name):
     span_tag.string = translate(
         _(
             "iframe_placeholder_text_2",
-            default=u"Please",
+            default="Please",
         ),
         context=request,
     )
@@ -248,7 +231,7 @@ def anchor_placeholder(provider_name):
     a_tag_enable_yt.string = translate(
         _(
             "iframe_placeholder_text_3",
-            default=u"enable them",
+            default="enable them",
         ),
         context=request,
     )
@@ -258,18 +241,18 @@ def anchor_placeholder(provider_name):
     span_tag.string = translate(
         _(
             "iframe_placeholder_text_4",
-            default=u" or ",
+            default=" or ",
         ),
         context=request,
     )
     tag.append(span_tag)
 
     a_tag_open_cc = soup.new_tag("a", href="#")
-    a_tag_open_cc["data-cc-open"] = ""
+    a_tag_open_cc["data-cc-open-settings"] = ""
     a_tag_open_cc.string = translate(
         _(
             "iframe_placeholder_text_5",
-            default=u"manage your preferences",
+            default="manage your preferences",
         ),
         context=request,
     )
@@ -278,6 +261,8 @@ def anchor_placeholder(provider_name):
 
 
 def domain_allowed(domain_whitelist, current_url):
+    if not domain_whitelist:
+        return True
     if not filter(bool, domain_whitelist):
         return True
     for domain in domain_whitelist:

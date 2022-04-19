@@ -24,7 +24,14 @@ Changelog
   [lucabel]
 - Do not use $ but vanilla javascript for old Plone sites compatibility.
   [cekk]
-
+- Merge analytics and tech cookies labels into functional cookies field.
+  [cekk]
+- More extensibility for transformers (now you can set a transform for each provider name).
+  [cekk]
+- Handle recaptcha.
+  [cekk]
+- policy_url field now can handle multi-language strings.
+  [cekk]
 
 0.2.2 (2022-01-27)
 ------------------

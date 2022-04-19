@@ -6,6 +6,11 @@ from plone import api
 from plone.memoize import view
 from zope.i18n import translate
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    pass
+
 import logging
 import json
 import six
@@ -42,15 +47,7 @@ function accept_anchor_based_provider(cc, placeholder_identifier){
             newScript.setAttribute('async', '');
             anchor.after(newScript);
             placeholder.setAttribute('hidden', true);
-        }// else {
-        //   anchor.setAttribute('href', '');
-        //   anchor.setAttribute('hidden', true);
-        //   twitter.setAttribute('hidden', true);
-           // we need to identify the iframe
-        //   debugger;
-        //   twitter.setAttribute('src', );
-        //   placeholder.removeAttribute('hidden');
-        // }
+        }
     });
 }
 
@@ -74,6 +71,8 @@ function accept_iframe(cc) {
         var src = iframe.dataset.ccSrc;
         var name = iframe.dataset.ccName;
         var placeholder = iframe.previousElementSibling;
+        console.log('placeholder: ', placeholder);
+        console.log('name: ', name);
         if (placeholder && src) {
             if(cc.isAccepted(name)){
                 iframe.setAttribute('src', src);
@@ -86,11 +85,29 @@ function accept_iframe(cc) {
             }
         }
     });
+    // handle recaptcha
+    if (cc.isAccepted("recaptcha")) {
+        // re-enable scripts
+        var scripts = document.querySelectorAll('script[data-cc-src*="https://www.google.com/recaptcha/api.js"]');
+        if (scripts.length > 0) {
+            scripts.forEach(function(script) {
+                var scriptSrc = script.dataset.ccSrc;
+                var sibling = script.nextElementSibling;
+                script.parentNode.removeChild(script);
+                var newScript = document.createElement('script');
+                newScript.setAttribute('src', scriptSrc);
+                newScript.setAttribute('async', '');
+                newScript.setAttribute('defer', '');
+                sibling.before(newScript);
+            });
+            document.querySelectorAll('div.iframe-placeholder.recaptcha').forEach(function(placeholder) {
+                placeholder.setAttribute('hidden', true);
+            });
+        }
+    }
 }
 
 if (Object.keys(profiling_cookies_config).length > 0) {
-    var has_hotjar = {has_hotjar_placeholder};
-
     iframeCookies.forEach(function(name) {
         if (profiling_cookies_config.scripts[name] !== undefined) {
             profiling_cookies_config.scripts[name].accept = (cc, resolve, isInit) => {
@@ -121,23 +138,17 @@ if (Object.keys(profiling_cookies_config).length > 0) {
         }
     });
 
-    if (has_hotjar) {
-        var hjLabels = {hotjar_labels_placeholder};
-        profiling_cookies_config.scripts.hotjar = {
-            id: "{hotjar_id_placeholder}",
-            title: hjLabels.title,
-            description: hjLabels.description,
-            accept: function(cc, resolve, isInit) {
+    if (profiling_cookies_config.scripts.hotjar !== undefined) {
+        profiling_cookies_config.scripts.hotjar.accept = function(cc, resolve, isInit) {
                 var id = cc.config.settings[1].scripts.hotjar.id;
                 var script = document.createElement("script");
                 script.innerHTML =
-                    "(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:" +
+                    "(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:'" +
                     id +
-                    ",hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=')";
+                    "',hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=')";
                 document.head.appendChild(script);
                 cc.setLoaded("hotjar");
-            },
-        }
+            };
     }
 }
 
@@ -191,6 +202,7 @@ var cc = new redturtlechefcookie({
 document.addEventListener("DOMContentLoaded", () => {
   cc.init();
   accept_iframe(cc);
+  accept_twitter_timeline(cc);
   document.querySelectorAll(".pat-tiles-management").forEach(el => {
     el.addEventListener("rtTilesLoaded", e => {
       accept_iframe(cc);
@@ -240,10 +252,12 @@ function getCookie(name) {
       e.preventDefault();
     }
   });
-
-  document.body.insertAdjacentHTML("beforeend", '<a title="{open_settings_placeholder}" id="cookie-settings-open" {data_cc_open_placeholder}=“” href=“/”><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-lock" class="svg-inline--fa fa-user-lock fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 96 128a128 128 0 0 0 128 128zm96 64a63.08 63.08 0 0 1 8.1-30.5c-4.8-.5-9.5-1.5-14.5-1.5h-16.7a174.08 174.08 0 0 1-145.8 0h-16.7A134.43 134.43 0 0 0 0 422.4V464a48 48 0 0 0 48 48h280.9a63.54 63.54 0 0 1-8.9-32zm288-32h-32v-80a80 80 0 0 0-160 0v80h-32a32 32 0 0 0-32 32v160a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V320a32 32 0 0 0-32-32zM496 432a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm32-144h-64v-80a32 32 0 0 1 64 0z"></path></svg></a>');
-
+  {settings_icon_placeholder}
 });
+"""
+
+SETTINGS_ICON_PLACEHOLDER = """
+document.body.insertAdjacentHTML("beforeend", '<a title="{open_settings_placeholder}" id="cookie-settings-open" {data_cc_open_placeholder}="" href="/"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-lock" class="svg-inline--fa fa-user-lock fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 96 128a128 128 0 0 0 128 128zm96 64a63.08 63.08 0 0 1 8.1-30.5c-4.8-.5-9.5-1.5-14.5-1.5h-16.7a174.08 174.08 0 0 1-145.8 0h-16.7A134.43 134.43 0 0 0 0 422.4V464a48 48 0 0 0 48 48h280.9a63.54 63.54 0 0 1-8.9-32zm288-32h-32v-80a80 80 0 0 0-160 0v80h-32a32 32 0 0 0-32 32v160a32 32 0 0 0 32 32h224a32 32 0 0 0 32-32V320a32 32 0 0 0-32-32zM496 432a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm32-144h-64v-80a32 32 0 0 1 64 0z"></path></svg></a>');
 """
 
 
@@ -258,25 +272,12 @@ class View(BrowserView):
             "Content-type", " application/javascript; charset=utf-8"
         )
         # i can't use format method because there are a lot of brackets
-        manage_cookie_label = translate(
-            _(
-                "manage_cookie_settings_label",
-                default=u"Manage cookie settings",
-            ),
-            context=self.request,
-        )
-
-        manage_cc_open = "data-cc-open-settings"
-        if self.get_only_technical_cookies_values():
-            manage_cc_open = "data-cc-open"
 
         endpoint = self.get_registry_settings("registry_endpoint")
         consent_traccking_url = endpoint and '"{}"'.format(endpoint) or "null"
 
         cookie_prefix = '"{}"'.format(self.get_registry_settings("cookie_name"))
 
-        if six.PY2:
-            manage_cookie_label = manage_cookie_label.encode("utf-8")
         return (
             TEMPLATE.replace(
                 "{iframe_cookies_ids_placeholder}",
@@ -290,13 +291,6 @@ class View(BrowserView):
                 "{profiling_cookies_config_placeholder}",
                 self.get_profiling_cookies_config(),
             )
-            .replace("{has_hotjar_placeholder}", json.dumps(self.has_hotjar()))
-            # .replace("{youtube_labels_placeholder}", self.get_youtube_labels())
-            .replace("{hotjar_labels_placeholder}", self.get_hotjar_labels())
-            .replace(
-                "{hotjar_id_placeholder}",
-                self.get_registry_settings(name="hotjar_id") or "''",
-            )
             .replace("{message_labels_placeholder}", self.get_message_labels())
             .replace("{labels_placeholder}", self.get_labels())
             .replace(
@@ -304,16 +298,9 @@ class View(BrowserView):
                 self.get_tech_cookies_config(),
             )
             .replace("{settings_placeholder}", self.get_settings())
-            .replace(
-                "{open_settings_placeholder}",
-                manage_cookie_label,
-            )
-            .replace(
-                "{data_cc_open_placeholder}",
-                manage_cc_open,
-            )
             .replace("{consent_tracking_placeholder}", consent_traccking_url)
             .replace("{cookie_prefix}", cookie_prefix)
+            .replace("{settings_icon_placeholder}", self.show_settings_icon())
         )
 
     @view.memoize
@@ -321,8 +308,13 @@ class View(BrowserView):
         try:
             value = api.portal.get_registry_record(name, interface=IChefCookieSettings)
             if load_json:
-                value = json.loads(value)
-            if isinstance(value, six.string_types) and six.PY2:
+                if six.PY2:
+                    value = json.JSONDecoder(object_pairs_hook=OrderedDict).decode(
+                        value
+                    )
+                else:
+                    value = json.loads(value)
+            elif isinstance(value, six.string_types) and six.PY2:
                 value = value.encode("utf-8")
             return value
         except Exception as e:
@@ -331,9 +323,13 @@ class View(BrowserView):
 
     def get_message_labels(self):
         labels = self.get_registry_settings("header_labels") or "{}"
-        policy_url = self.get_registry_settings("policy_url")
-        if policy_url:
-            labels = labels.replace("{policy_url}", policy_url)
+        policy_url = self.get_registry_settings(name="policy_url", load_json=True)
+        language = api.portal.get_current_language()
+        if policy_url and language in policy_url:
+            url = policy_url[language]
+            if six.PY2:
+                url = url.encode("utf-8")
+            labels = labels.replace("{policy_url}", url)
         return labels
 
     def get_labels(self):
@@ -366,13 +362,10 @@ class View(BrowserView):
         }
 
         labels = self.get_registry_settings(name="technical_cookies_labels")
-        analytics_cookies_labels = self.get_registry_settings(
-            name="analytics_cookies_labels"
+        specific_labels = self.get_registry_settings(
+            name="technical_cookies_specific_labels", load_json=True
         )
-        matomo_cookies_labels = self.get_registry_settings(name="matomo_cookies_labels")
-        functional_cookies_labels = self.get_registry_settings(
-            name="functional_cookies_labels"
-        )
+
         analytics_id = self.get_registry_settings(name="analytics_id")
         matomo_id = self.get_registry_settings(name="matomo_id")
 
@@ -380,18 +373,15 @@ class View(BrowserView):
             res.update(json.loads(labels))
 
         scripts = {}
-        if functional_cookies_labels:
-            scripts["techcookies"] = json.loads(functional_cookies_labels)
+        if six.PY2:
+            scripts = OrderedDict()
 
-        if analytics_id and analytics_cookies_labels:
-            analytics_data = {"id": analytics_id}
-            analytics_data.update(json.loads(analytics_cookies_labels))
-            scripts["analytics"] = analytics_data
-
-        if matomo_id and matomo_cookies_labels:
-            matomo_data = {"id": matomo_id}
-            matomo_data.update(json.loads(matomo_cookies_labels))
-            scripts["matomo"] = matomo_data
+        for name, value in specific_labels.items():
+            scripts[name] = value
+            if name == "analytics" and analytics_id:
+                scripts[name]["id"] = analytics_id
+            if name == "matomo" and matomo_id:
+                scripts[name]["id"] = matomo_id
 
         if scripts:
             res.update({"scripts": scripts})
@@ -410,7 +400,6 @@ class View(BrowserView):
         profiling_cookies_specific_labels = self.get_registry_settings(
             name="profiling_cookies_specific_labels", load_json=True
         )
-
         if (
             not hotjar_id  # noqa
             and not linkedin_id  # noqa
@@ -420,28 +409,27 @@ class View(BrowserView):
             return "{}"
 
         scripts = {}
+        if six.PY2:
+            scripts = OrderedDict()
 
-        for iframe_id in iframe_cookies_ids:
-            labels = profiling_cookies_specific_labels.get(iframe_id, {})
-            if labels:
-                scripts[iframe_id] = labels
+        for id, labels in profiling_cookies_specific_labels.items():
+            if id in iframe_cookies_ids or id in anchor_cookies_ids:
+                scripts[id] = labels
 
-        # handle provider base on anchor like twitter timeline
-        for anchor_id in anchor_cookies_ids:
-            labels = profiling_cookies_specific_labels.get(anchor_id, {})
-            if labels:
-                scripts[anchor_id] = labels
+            if facebook_id and id == "facebook":
+                if id not in scripts:
+                    scripts[id] = labels
+                scripts[id]["id"] = facebook_id
 
-        if facebook_id:
-            if "facebook" not in scripts:
-                labels = profiling_cookies_specific_labels.get("facebook", {})
-                if labels:
-                    scripts["facebook"] = labels
-            scripts["facebook"]["id"] = facebook_id
+            if linkedin_id and id == "linkedin":
+                if id not in scripts:
+                    scripts[id] = labels
+                scripts[id]["id"] = linkedin_id
 
-        if linkedin_id and "linkedin" in profiling_cookies_specific_labels:
-            scripts["linkedin"] = {"id": linkedin_id}
-            scripts["linkedin"].update(profiling_cookies_specific_labels["linkedin"])
+            if hotjar_id and id == "hotjar":
+                if id not in scripts:
+                    scripts[id] = labels
+                scripts[id]["id"] = hotjar_id
 
         res = {
             "checked_by_default": False,
@@ -462,17 +450,6 @@ class View(BrowserView):
 
         return labels.get(name, {})
 
-    def has_hotjar(self):
-        id = self.get_registry_settings(name="hotjar_id")
-        labels = self.get_profiling_labels_by_name(name="hotjar")
-
-        if id and labels:
-            return True
-        return False
-
-    def get_hotjar_labels(self):
-        return json.dumps(self.get_profiling_labels_by_name(name="hotjar"))
-
     def get_iframe_cookies_ids(self):
         data = self.get_registry_settings(name="iframes_mapping")
 
@@ -490,3 +467,23 @@ class View(BrowserView):
             id, domains = mapping.split("|")
             res.append(id)
         return res
+
+    def show_settings_icon(self):
+        if self.get_registry_settings(name="show_settings_icon") is False:
+            return ""
+        manage_cc_open = "data-cc-open-settings"
+        manage_cookie_label = translate(
+            _(
+                "manage_cookie_settings_label",
+                default="Manage cookie settings",
+            ),
+            context=self.request,
+        )
+        if six.PY2:
+            manage_cookie_label = manage_cookie_label.encode("utf-8")
+        if self.get_only_technical_cookies_values():
+            manage_cc_open = "data-cc-open"
+        return SETTINGS_ICON_PLACEHOLDER.format(
+            open_settings_placeholder=manage_cookie_label,
+            data_cc_open_placeholder=manage_cc_open,
+        )

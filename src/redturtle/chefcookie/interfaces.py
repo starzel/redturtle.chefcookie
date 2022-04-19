@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 from redturtle.chefcookie import _
-from redturtle.chefcookie.defaults import HEADER_LABELS
 from redturtle.chefcookie.defaults import GENERAL_LABELS
-from redturtle.chefcookie.defaults import TECHNICAL_COOKIES_LABELS
-from redturtle.chefcookie.defaults import FUNCTIONAL_COOKIES_LABELS
-from redturtle.chefcookie.defaults import IFRAMES_MAPPING
-from redturtle.chefcookie.defaults import ANCHOR_MAPPING
-from redturtle.chefcookie.defaults import ANALYTICS_COOKIES_LABELS
-from redturtle.chefcookie.defaults import MATOMO_COOKIES_LABELS
+from redturtle.chefcookie.defaults import HEADER_LABELS
 from redturtle.chefcookie.defaults import PROFILING_COOKIES_LABELS
 from redturtle.chefcookie.defaults import PROFILING_COOKIES_SPECIFIC_LABELS
+from redturtle.chefcookie.defaults import TECHNICAL_COOKIES_LABELS
+from redturtle.chefcookie.defaults import TECHNICAL_COOKIES_SPECIFIC_LABELS
 from zope import schema
 from zope.interface import Invalid
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -29,11 +25,16 @@ def validate_cfg_json(value):
     try:
         jv = json.loads(value)
     except ValueError as e:
+        message = getattr(e, "message", str(e))
         raise Invalid(
             _(
                 "invalid_json",
                 "JSON is not valid, parser complained: ${message}",
-                mapping={"message": "{msg} {pos}".format(msg=e.msg, pos=e.pos)},
+                mapping={
+                    "message": "{msg} {pos}".format(
+                        msg=message, pos=getattr(e, "pos", "")
+                    ),
+                },
             )
         )
     if not isinstance(jv, dict):
@@ -56,6 +57,22 @@ class IChefCookieSettingsConfigs(Schema):
             default=u"Select to use chefcookie",
         ),
         required=False,
+    )
+    show_settings_icon = schema.Bool(
+        title=_(
+            "show_settings_icon_label",
+            default=u"Show settings icon",
+        ),
+        description=_(
+            "show_settings_icon_help",
+            default=u"If selected, an icon that opens cookie settings will be "
+            "displayed on the right side of the page. You should always allow "
+            "users to change their settings, so if you disable this option, be "
+            "sure to insert a link somewhere in the page (e.g. in the footer). "
+            'It should be an "a" tag with data-cc-open-settings attribute.',
+        ),
+        required=False,
+        default=True,
     )
     cookie_name = schema.TextLine(
         title=_("chefcookie_cookie_prefix_label", default=u"Cookie prefix"),
@@ -89,7 +106,10 @@ class IChefCookieSettingsConfigs(Schema):
         title=_("chefcookie_analytics_id_label", default=u"Analytics Id"),
         description=_(
             "chefcookie_analytics_id_help",
-            default=u"If set and the user has accepted the Analytics cookies, this id will be used to track the user.",
+            default=u"If set and the user has accepted the Analytics cookies, "
+            "this id will be used to track the user. To enable this checkbox in "
+            'the banner, you also need to add the "analytics" labels into '
+            '"Technical cookies specific labels" field.',
         ),
         required=False,
     )
@@ -140,12 +160,16 @@ class IChefCookieSettingsConfigs(Schema):
         required=False,
     )
 
-    policy_url = schema.TextLine(
+    policy_url = schema.SourceText(
         title=_("chefcookie_policy_url_label", default=u"Policy URL"),
         description=_(
             "chefcookie_policy_url_help",
-            default='Insert the cookie policy page URL. This can be used in "Banner header" field as "{policy_url}" to dynamically replace it with the given URL.',
+            default="Insert the cookie policy page URL. One per each language in the website. "
+            'This can be used in "Banner header" field as "{policy_url}" to '
+            "dynamically replace it with the given URL.",
         ),
+        default=u"{}",
+        constraint=validate_cfg_json,
         required=False,
     )
 
@@ -155,7 +179,7 @@ class IChefCookieSettingsConfigs(Schema):
             "chefcookie_iframes_mapping_labels_help",
             default=u"Insert a list of mappings between a provider and a list of possible domains for their iframes. If the user blocks their cookies, the iframes will be blocked as well.",
         ),
-        default=IFRAMES_MAPPING,
+        default=[],
         missing_value=[],
         value_type=schema.TextLine(),
         required=False,
@@ -166,7 +190,7 @@ class IChefCookieSettingsConfigs(Schema):
             "chefcookie_links_mapping_labels_help",
             default=u"Insert a list of mappings between a provider and a list of possible links xpath selector for their anchor. If the user blocks their cookies, the provider will be blocked as well.",
         ),
-        default=ANCHOR_MAPPING,
+        default=[],
         missing_value=[],
         value_type=schema.TextLine(),
         required=False,
@@ -211,43 +235,16 @@ class IChefCookieSettingsLabels(Schema):
         constraint=validate_cfg_json,
         required=False,
     )
-    functional_cookies_labels = schema.SourceText(
+    technical_cookies_specific_labels = schema.SourceText(
         title=_(
-            "chefcookie_functional_cookies_labels",
-            default=u"Functional cookies labels",
+            "chefcookie_technical_cookies_specific_labels",
+            default=u"Technical cookies specific labels",
         ),
         description=_(
-            "chefcookie_functional_cookies_labels_help",
-            default='If compiled, this will enable the "Functional cookies" flag in the banner.',
+            "chefcookie_technical_cookies_specific_labels_help",
+            default=u"Labels for specific technical cookies.",
         ),
-        default=FUNCTIONAL_COOKIES_LABELS,
-        constraint=validate_cfg_json,
-        required=False,
-    )
-
-    analytics_cookies_labels = schema.SourceText(
-        title=_(
-            "chefcookie_analytics_cookies_labels",
-            default=u"Analytics cookies labels",
-        ),
-        description=_(
-            "chefcookie_analytics_cookies_labels_help",
-            default='If compiled, this will enable the "Analytics cookies" flag in the banner.',
-        ),
-        default=ANALYTICS_COOKIES_LABELS,
-        constraint=validate_cfg_json,
-        required=True,
-    )
-    matomo_cookies_labels = schema.SourceText(
-        title=_(
-            "chefcookie_matomo_cookies_labels",
-            default=u"Matomo cookies labels",
-        ),
-        description=_(
-            "chefcookie_matomo_cookies_labels_help",
-            default='If compiled, this will enable the "Matomo" flag in the banner.',
-        ),
-        default=MATOMO_COOKIES_LABELS,
+        default=TECHNICAL_COOKIES_SPECIFIC_LABELS,
         constraint=validate_cfg_json,
         required=True,
     )
