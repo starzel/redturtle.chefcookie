@@ -43,6 +43,8 @@ class ChefcookieIframeTransform(object):
         """
         if the src matches configured domains, return the config name
         """
+        if not src:
+            return ""
         iframes_mapping = self.chefcookie_registry_record.iframes_mapping
         for mapping in filter(bool, iframes_mapping):
             name, domains = mapping.split("|")

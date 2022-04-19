@@ -4,26 +4,6 @@ Changelog
 0.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
-
-0.2.3 (2022-03-24)
-------------------
-
-- add flag to control panel that allow to enable cookie banner
-- add cookie prefix to control panel to control the js plugin option
-- allow to select endpoint for consent registry
-- add domain whitelist so in case you have site with multiple domain can show 
-  the banner in selected domain
-- add matomo
-- some minor fix to prevent cases where site editor remove configuration lines 
-  partially
-- add log tracking to new introduced actions
-- Fix problem loading twitter timeline in tile manager from
-  redturtle.tiles.management
-  [lucabel]
-- Do not use $ but vanilla javascript for old Plone sites compatibility.
-  [cekk]
 - Merge analytics and tech cookies labels into functional cookies field.
   [cekk]
 - More extensibility for transformers (now you can set a transform for each provider name).
@@ -31,6 +11,27 @@ Changelog
 - Handle recaptcha.
   [cekk]
 - policy_url field now can handle multi-language strings.
+  [cekk]
+- Do not break for iframes without src attribute.
+  [cekk]
+
+
+0.2.3 (2022-03-24)
+------------------
+
+- Add flag to control panel that allow to enable cookie banner
+- Add cookie prefix to control panel to control the js plugin option
+- Allow to select endpoint for consent registry
+- Add domain whitelist so in case you have site with multiple domain can show 
+  the banner in selected domain
+- Add matomo
+- Some minor fix to prevent cases where site editor remove configuration lines 
+  partially
+- Add log tracking to new introduced actions
+- Fix problem loading twitter timeline in tile manager from
+  redturtle.tiles.management
+  [lucabel]
+- Do not use $ but vanilla javascript for old Plone sites compatibility.
   [cekk]
 
 0.2.2 (2022-01-27)
