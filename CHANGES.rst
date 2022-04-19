@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.4 (unreleased)
+1.0.0 (2022-04-19)
 ------------------
 
 - Merge analytics and tech cookies labels into functional cookies field.
