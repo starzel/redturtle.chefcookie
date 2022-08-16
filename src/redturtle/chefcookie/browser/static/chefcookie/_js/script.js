@@ -1428,7 +1428,7 @@ export default class chefcookie {
         if (providers.length === 0) {
             providers.push('null');
         }
-        helper.cookieSet(this.getCookieName('accepted_providers'), providers.join(','), this.getCookieExpiration());
+        helper.cookieSet(this.getCookieName('accepted_providers'), providers.join('%2c'), this.getCookieExpiration());
     }
 
     addToCookie(provider) {
@@ -1439,11 +1439,11 @@ export default class chefcookie {
         ) {
             providers = [];
         } else {
-            providers = helper.cookieGet(this.getCookieName('accepted_providers')).split(',');
+            providers = helper.cookieGet(this.getCookieName('accepted_providers')).split('%2C');
         }
         if (providers.indexOf(provider) === -1) {
             providers.push(provider);
-            helper.cookieSet(this.getCookieName('accepted_providers'), providers.join(','), this.getCookieExpiration());
+            helper.cookieSet(this.getCookieName('accepted_providers'), providers.join('%2c'), this.getCookieExpiration());
         }
     }
 
@@ -1451,13 +1451,13 @@ export default class chefcookie {
         if (!helper.cookieExists(this.getCookieName('accepted_providers'))) {
             return;
         }
-        let providers = helper.cookieGet(this.getCookieName('accepted_providers')).split(',');
+        let providers = helper.cookieGet(this.getCookieName('accepted_providers')).split('%2C');
         let index = providers.indexOf(provider);
         if (index !== -1) {
             providers.splice(index, 1);
         }
         if (providers.length > 0) {
-            helper.cookieSet(this.getCookieName('accepted_providers'), providers.join(','), this.getCookieExpiration());
+            helper.cookieSet(this.getCookieName('accepted_providers'), providers.join('%2c'), this.getCookieExpiration());
         } else {
             helper.cookieSet(this.getCookieName('accepted_providers'), 'null', this.getCookieExpiration());
         }
@@ -1487,7 +1487,7 @@ export default class chefcookie {
         this.config.settings.forEach(settings__value => {
             if (settings__value.scripts !== undefined) {
                 Object.entries(settings__value.scripts).forEach(([scripts__key, scripts__value]) => {
-                    if (settings.split(',').indexOf(scripts__key) === -1) {
+                    if (settings.split('%2C').indexOf(scripts__key) === -1) {
                         accept_all = false;
                         return;
                     }
@@ -1508,7 +1508,7 @@ export default class chefcookie {
         if (settings == 'null') {
             return;
         }
-        settings = settings.split(',');
+        settings = settings.split('%2C');
         this.config.settings.forEach(settings__value => {
             if (settings__value.scripts !== undefined) {
                 Object.entries(settings__value.scripts).forEach(([scripts__key, scripts__value]) => {
@@ -1741,7 +1741,7 @@ export default class chefcookie {
         if (!helper.cookieExists(this.getCookieName('accepted_providers'))) {
             return false;
         }
-        return helper.cookieGet(this.getCookieName('accepted_providers')).split(',').indexOf(provider) > -1;
+        return helper.cookieGet(this.getCookieName('accepted_providers')).split('%2C').indexOf(provider) > -1;
     }
 
     isLoaded(provider) {

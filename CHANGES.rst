@@ -4,7 +4,8 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- [BREAKING CHANGE] Store list of accepted_providers in ascii-way. If you update to this version, you need to force re-accept cookies for example using a different prefix.
+  [cekk]
 
 
 1.0.0 (2022-04-19)
