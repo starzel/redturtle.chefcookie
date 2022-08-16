@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.1 (unreleased)
+2.0.0 (2022-08-16)
 ------------------
 
 - [BREAKING CHANGE] Store list of accepted_providers in ascii-way. If you update to this version, you need to force re-accept cookies for example using a different prefix.
