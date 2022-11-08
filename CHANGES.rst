@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
+2.0.1 (2022-11-08)
 ------------------
 
 - Remove unused python_requires in setup.py
