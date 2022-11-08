@@ -4,7 +4,8 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove unused python_requires in setup.py
+  [cekk]
 
 
 2.0.0 (2022-08-16)
