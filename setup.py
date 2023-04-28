@@ -42,6 +42,7 @@ setup(
         "Source": "https://github.com/RedTurtle/redturtle.chefcookie",
         "Tracker": "https://github.com/RedTurtle/redturtle.chefcookie/issues",
     },
+    python_requires=">=2.7",
     license="GPL version 2",
     packages=find_packages("src", exclude=["ez_setup", "node_modules"]),
     namespace_packages=["redturtle"],
@@ -68,7 +69,5 @@ setup(
     entry_points="""
     [z3c.autoinclude.plugin]
     target = plone
-    [console_scripts]
-    update_locale = redturtle.chefcookie.locales.update:update_locale
     """,
 )
