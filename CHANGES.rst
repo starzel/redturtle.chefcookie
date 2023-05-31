@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.2 (unreleased)
+2.1.0 (2023-05-31)
 ------------------
 
 - Remove default set cookie
