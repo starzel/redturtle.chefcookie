@@ -4,9 +4,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- remove default set cookie
+- Remove default set cookie
   [mamico]
-
+- Add title to close link also for tech cookies.
+  [cekk]
 
 2.0.1 (2022-11-08)
 ------------------
