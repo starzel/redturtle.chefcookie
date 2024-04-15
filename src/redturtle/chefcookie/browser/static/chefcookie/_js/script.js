@@ -1587,7 +1587,7 @@ export default class chefcookie {
             script.innerHTML =
                 "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '" +
                 id +
-                "', { 'anonymize_ip': true, cookie_flags: 'SameSite=None;Secure' });";
+                "', {'ad_data_layer': 'denied', 'ad_personalization': 'denied', 'anonymize_ip': true, cookie_flags: 'SameSite=None;Secure' });";
             document.head.appendChild(script);
         }
 
